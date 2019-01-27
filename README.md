@@ -1,4 +1,4 @@
 # FloHsm
-Code generation tool for C++ hierarchical state machines
+Code generation tool written in Python for C++ hierarchical state machines
 
 Coming soon ;-)
