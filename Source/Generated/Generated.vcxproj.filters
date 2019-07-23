@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc">
+      <Filter>Gtest</Filter>
+    </ClCompile>
+    <ClCompile Include="TestChoice\TestChoicePseudoStates.cpp">
+      <Filter>TestChoice</Filter>
+    </ClCompile>
+    <ClCompile Include="TestExhaustive\TestExhaustive.cpp">
+      <Filter>TestExhaustive</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Gtest">
+      <UniqueIdentifier>{a9c20755-8fea-499c-b868-b6ef4370707e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestExhaustive">
+      <UniqueIdentifier>{c3fc0c59-3e09-4bf9-a7d3-0a7d21a20f9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestChoice">
+      <UniqueIdentifier>{4fea2a28-3b47-4f1b-bad0-a665490f3045}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="TestExhaustive\exhaustive.txt">
+      <Filter>TestExhaustive</Filter>
+    </Text>
+    <Text Include="TestChoice\choice.txt">
+      <Filter>TestChoice</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestExhaustive\Interfaces.hpp">
+      <Filter>TestExhaustive</Filter>
+    </ClInclude>
+    <ClInclude Include="TestExhaustive\StateIds.hpp">
+      <Filter>TestExhaustive</Filter>
+    </ClInclude>
+    <ClInclude Include="TestExhaustive\StateMachine.hpp">
+      <Filter>TestExhaustive</Filter>
+    </ClInclude>
+    <ClInclude Include="TestExhaustive\States.hpp">
+      <Filter>TestExhaustive</Filter>
+    </ClInclude>
+    <ClInclude Include="TestChoice\Interfaces.hpp">
+      <Filter>TestChoice</Filter>
+    </ClInclude>
+    <ClInclude Include="TestChoice\StateIds.hpp">
+      <Filter>TestChoice</Filter>
+    </ClInclude>
+    <ClInclude Include="TestChoice\StateMachine.hpp">
+      <Filter>TestChoice</Filter>
+    </ClInclude>
+    <ClInclude Include="TestChoice\States.hpp">
+      <Filter>TestChoice</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

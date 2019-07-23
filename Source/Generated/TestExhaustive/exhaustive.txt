@@ -1,0 +1,34 @@
+state S2{
+  state S3
+  state S4{
+    state S5
+    [*] --> S5
+  }
+}
+
+[*] --> S1 : A0
+
+S1 : <<entry>> / A1
+S1 : <<exit>> / A2
+S1 --> S6 : E2
+S1 --> S3 : E1
+
+S2 : <<entry>> / A3
+S2 : <<exit>> / A4
+
+S3 : <<entry>> / A5
+S3 : <<exit>> / A6
+S3 --> S4 : E1 [G2] / A7
+S3 --> S1 : E2 [G2] / A8
+
+S4 : <<entry>> / A9
+S4 : <<exit>> / A10
+
+S5 : <<entry>> / A11
+S5 : <<exit>> / A12
+S5 : E3 [G3] / A13
+S5 --> S3 : E3 [!G3]
+
+S6 : <<entry>> [G2] / A14
+S6 : <<exit>> [G1] / A15
+S6 --> S4 : E1 / A16
