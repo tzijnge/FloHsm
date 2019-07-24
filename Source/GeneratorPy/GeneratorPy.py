@@ -3,7 +3,7 @@ import os.path
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Parser'))
 import argparse
-from StateMachineDescriptors import State, StateTransition, InternalTransition, EntryExit
+from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit
 from StateMachineParser import StateMachineParser
 from StateMachineSemanticAnalyzer import SemanticAnalyzer
 from typing import List, Dict, Set, Any
@@ -72,6 +72,18 @@ class StateWriter(object):
                     else:
                         self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(it.toState, it.action))
 
+    def write_choice_constructor(self, state:State) -> None:
+        with self.code_block():
+            for g in state.choice_guard_conditions():
+                self.indent_and_append('const bool {} = guards->{}();'.format(g, g))
+
+            for ct in state.choice_transitions:
+                with self.if_block(ct.guard.to_string()):
+                    if ct.action:
+                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(ct.toState, ct.action))
+                    else:
+                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function());'.format(ct.toState))
+
     def write_constructor(self, state:State) -> None:
         if state.parent or state.entry or state.initial_transition:
             self.indent_and_append('{}(StateId fromState, StateId toState, IActions* _actions, IGuards* _guards)'.format(state.name))
@@ -83,7 +95,9 @@ class StateWriter(object):
         else:
             self.indent_and_append('    : StateBase(_actions, _guards)')
 
-        if state.entry is None and state.initial_transition is None:
+        if state.state_type == StateType.CHOICE:
+            self.write_choice_constructor(state)
+        elif state.entry is None and state.initial_transition is None:
             self.indent_and_append('{}')
         else:
             self.write_constructor_body(state)

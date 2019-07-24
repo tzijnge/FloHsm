@@ -1,0 +1,13 @@
+v15
+Debug
+*.user
+/Source/Generated/TestChoice/StateIds.hpp
+/Source/Generated/TestChoice/StateMachine.hpp
+/Source/Generated/TestChoice/States.hpp
+/Source/Generated/TestChoice/plantuml.png
+/Source/Generated/TestExhaustive/Interfaces.hpp
+/Source/Generated/TestExhaustive/StateIds.hpp
+/Source/Generated/TestExhaustive/StateMachine.hpp
+/Source/Generated/TestExhaustive/States.hpp
+3.7
+__pycache__
