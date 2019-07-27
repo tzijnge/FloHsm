@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="TestExhaustive.cpp" />
     <ClCompile Include="SingleState\SingleStateTest.cpp">
       <Filter>SingleState</Filter>
     </ClCompile>
@@ -13,27 +12,17 @@
     <ClCompile Include="ActionWithArgument\ActionWithArgumentTest.cpp">
       <Filter>ActionWithArgument</Filter>
     </ClCompile>
-    <ClCompile Include="Choice\ChoiceTest.cpp">
-      <Filter>Choice</Filter>
-    </ClCompile>
     <ClCompile Include="AlignmentTest.cpp" />
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc">
       <Filter>Gtest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Exhaustive.hpp" />
-    <ClInclude Include="ExhaustiveStates.hpp" />
-    <ClInclude Include="ExhaustiveStateIds.hpp" />
-    <ClInclude Include="ExhaustiveInterfaces.hpp" />
     <ClInclude Include="SingleState\SingleState.hpp">
       <Filter>SingleState</Filter>
     </ClInclude>
     <ClInclude Include="CompositeState\CompositeState.hpp">
       <Filter>CompositeState</Filter>
-    </ClInclude>
-    <ClInclude Include="Choice\Choice.hpp">
-      <Filter>Choice</Filter>
     </ClInclude>
     <ClInclude Include="ActionWithArgument\ActionWithArgument.hpp">
       <Filter>ActionWithArgument</Filter>
@@ -45,9 +34,6 @@
     </Filter>
     <Filter Include="CompositeState">
       <UniqueIdentifier>{b4d39e47-78e2-4c09-b96b-845b4113a2ef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Choice">
-      <UniqueIdentifier>{3011bfe5-3764-4ffe-9e4c-7b11b72b62b4}</UniqueIdentifier>
     </Filter>
     <Filter Include="ActionWithArgument">
       <UniqueIdentifier>{64b83148-dd68-4246-9bbd-9c2434bd88c8}</UniqueIdentifier>

@@ -84,13 +84,13 @@ class StateMachineParser(object):
         fromState = State(name=p[1], lineno=p.slice[1].lineno)
         
         event=p[4].get('event', None) if p[4] is not None else None
-        to_state = p[3]
         guard = p[4].get('guard', None) if p[4] is not None else None
         action = p[5]
 
-        fromState.state_transitions.append(StateTransition(event, to_state, action, guard))
-        
-        toState = State(name=p[3], lineno=p.slice[3].lineno)
+        to_name = p[3] if p[3] != '[*]' else 'FloHsmFinal_5OdpEA31BEcPrWrNx8u7'
+        fromState.state_transitions.append(StateTransition(event, to_name, action, guard))
+
+        toState = State(name=to_name, lineno=p.slice[3].lineno)
 
         p[0] = {'from' : fromState, 'to' : toState}
 
@@ -100,11 +100,11 @@ class StateMachineParser(object):
 
         fromState = State('[*]_Initial', lineno=p.slice[1].lineno)
         
-        to_state = p[3]
+        to_name = p[3] if p[3] != '[*]' else 'FloHsmFinal_5OdpEA31BEcPrWrNx8u7'
         action = p[4]
-        fromState.initial_transition = InitialTransition(to_state, action)
+        fromState.initial_transition = InitialTransition(to_name, action)
         
-        toState = State(name=p[3], lineno=p.slice[3].lineno)
+        toState = State(name=to_name, lineno=p.slice[3].lineno)
 
         p[0] = {'from' : fromState, 'to' : toState}
 
@@ -226,7 +226,7 @@ class StateMachineParser(object):
         for child in children:
             if child.name == '[*]_Initial':
                 p[0].initial_transition = child.initial_transition
-            elif child.name == '[*]': # final pseudo state is always at top level
+            elif child.name == 'FloHsmFinal_5OdpEA31BEcPrWrNx8u7': # final pseudo state is always at top level
                 self.states.append(child)
             else:
                 child.parent = p[2]

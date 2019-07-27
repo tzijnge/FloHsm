@@ -78,15 +78,15 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
     def test_composite_state_with_nested_transition(self) -> None:
         description = '''
         state S0{
-          [*] --> [*]
+          [*] --> S1
         }
         '''
 
         self.parse(description)
         self.assertParseResult(num_states=2)
-        self.assertState(self.parser.states[0], name='[*]')
+        self.assertState(self.parser.states[0], name='S1', parent='S0')
         self.assertState(self.parser.states[1], name='S0', is_composite=True)
-        self.assertInitialTransition(self.parser.states[1].initial_transition, to='[*]')
+        self.assertInitialTransition(self.parser.states[1].initial_transition, to='S1')
 
     def test_negative_guard(self) -> None:
         description = 'state S1 : E1 [!G1] / A1'
@@ -341,8 +341,8 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
-        self.assertState(self.parser.states[1], name='[*]')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='[*]', event='E1')
+        self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1')
 
     def test_state_transition_to_final_with_event_and_guard(self) -> None:   
         description = 'F --> [*]: E1 [G1]'
@@ -351,8 +351,8 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
-        self.assertState(self.parser.states[1], name='[*]')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='[*]', event='E1', guard='G1')
+        self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', guard='G1')
 
     def test_state_transition_to_final_with_event_and_action(self) -> None:   
         description = 'F --> [*]: E1 / A1'
@@ -361,8 +361,8 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
-        self.assertState(self.parser.states[1], name='[*]')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='[*]', event='E1', action='A1')
+        self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', action='A1')
 
     def test_state_transition_to_final_with_event_and_guard_and_action(self) -> None:   
         description = 'F --> [*]: E1 [G1] / A1'
@@ -371,8 +371,8 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
-        self.assertState(self.parser.states[1], name='[*]')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='[*]', event='E1', guard='G1', action='A1')
+        self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', guard='G1', action='A1')
 
     def test_initial_state_transition_to_final_without_action(self) -> None:   
         description = '[*] --> [*]'
@@ -381,8 +381,8 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7')
-        self.assertState(self.parser.states[1], name='[*]')
-        self.assertInitialTransition(self.parser.states[0].initial_transition, to='[*]')
+        self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
+        self.assertInitialTransition(self.parser.states[0].initial_transition, to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
 
     def test_initial_state_transition_to_final_with_action(self) -> None:   
         description = '[*] --> [*] : A1'
@@ -391,8 +391,8 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7')
-        self.assertState(self.parser.states[1], name='[*]')
-        self.assertInitialTransition(self.parser.states[0].initial_transition, to='[*]', action='A1')
+        self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
+        self.assertInitialTransition(self.parser.states[0].initial_transition, to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', action='A1')
 
     def test_internal_initial_transition(self) -> None:
         description = '''

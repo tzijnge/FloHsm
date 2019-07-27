@@ -4,10 +4,15 @@ Debug
 /Source/Generated/TestChoice/StateIds.hpp
 /Source/Generated/TestChoice/StateMachine.hpp
 /Source/Generated/TestChoice/States.hpp
-/Source/Generated/TestChoice/plantuml.png
 /Source/Generated/TestExhaustive/Interfaces.hpp
 /Source/Generated/TestExhaustive/StateIds.hpp
 /Source/Generated/TestExhaustive/StateMachine.hpp
 /Source/Generated/TestExhaustive/States.hpp
 3.7
 __pycache__
+/Source/Generated/TestSingleState/States.hpp
+/Source/Generated/TestSingleState/Interfaces.hpp
+/Source/Generated/TestSingleState/SingleState.png
+/Source/Generated/TestSingleState/StateIds.hpp
+/Source/Generated/TestSingleState/StateMachine.hpp
+/Source/Generated/TestChoice/choice.png
