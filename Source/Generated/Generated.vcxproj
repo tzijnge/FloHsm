@@ -85,9 +85,10 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -105,9 +106,10 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exha
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -128,9 +130,10 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exha
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -152,9 +155,10 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exha
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -170,11 +174,13 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exha
       <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</TreatWarningAsError>
       <TreatWarningAsError Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</TreatWarningAsError>
     </ClCompile>
+    <ClCompile Include="TestCompositeState\TestCompositeState.cpp" />
     <ClCompile Include="TestExhaustive\TestExhaustive.cpp" />
     <ClCompile Include="TestSingleState\TestSingleState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestChoice\choice.txt" />
+    <Text Include="TestCompositeState\CompositeState.txt" />
     <Text Include="TestExhaustive\exhaustive.txt" />
     <Text Include="TestSingleState\SingleState.txt" />
   </ItemGroup>
@@ -183,6 +189,10 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exha
     <ClInclude Include="TestChoice\StateIds.hpp" />
     <ClInclude Include="TestChoice\StateMachine.hpp" />
     <ClInclude Include="TestChoice\States.hpp" />
+    <ClInclude Include="TestCompositeState\Interfaces.hpp" />
+    <ClInclude Include="TestCompositeState\StateIds.hpp" />
+    <ClInclude Include="TestCompositeState\StateMachine.hpp" />
+    <ClInclude Include="TestCompositeState\States.hpp" />
     <ClInclude Include="TestExhaustive\Interfaces.hpp" />
     <ClInclude Include="TestExhaustive\StateIds.hpp" />
     <ClInclude Include="TestExhaustive\StateMachine.hpp" />

@@ -170,6 +170,7 @@ class State(object):
     merge_errors: List[str]
     name: str
     parent: Optional[str]
+    initial_transition: InitialTransition
     internal_transitions: List[InternalTransition]
     state_transitions: List[StateTransition]
     choice_transitions: List[ChoiceTransition]
@@ -250,6 +251,12 @@ class State(object):
         elif self.exit is None and s.exit is None:
             pass
 
+        #initial transition
+        if self.initial_transition and s.initial_transition:
+            self.merge_errors.append('Unable to merge. Only one initial transition is allowed for state {}, but detected two. Possibly involved line(s): {})'.format(self.name, self.lineno + s.lineno))
+            return False
+
+        self.initial_transition = s.initial_transition or self.initial_transition
 
         #internal transitions
         self.internal_transitions.extend(s.internal_transitions)

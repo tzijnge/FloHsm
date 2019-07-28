@@ -16,3 +16,9 @@ __pycache__
 /Source/Generated/TestSingleState/StateIds.hpp
 /Source/Generated/TestSingleState/StateMachine.hpp
 /Source/Generated/TestChoice/choice.png
+/Source/Generated/TestCompositeState/CompositeState.png
+/Source/Generated/TestCompositeState/CompositeState.puml
+/Source/Generated/TestCompositeState/Interfaces.hpp
+/Source/Generated/TestCompositeState/StateIds.hpp
+/Source/Generated/TestCompositeState/StateMachine.hpp
+/Source/Generated/TestCompositeState/States.hpp

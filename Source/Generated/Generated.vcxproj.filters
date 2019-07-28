@@ -14,6 +14,9 @@
     <ClCompile Include="TestSingleState\TestSingleState.cpp">
       <Filter>TestSingleState</Filter>
     </ClCompile>
+    <ClCompile Include="TestCompositeState\TestCompositeState.cpp">
+      <Filter>TestCompositeState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Gtest">
@@ -28,6 +31,9 @@
     <Filter Include="TestSingleState">
       <UniqueIdentifier>{49464fb0-8181-46ea-8a72-c5914ed0b63a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCompositeState">
+      <UniqueIdentifier>{30a7217c-524e-4288-896c-3cc2b2400667}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestExhaustive\exhaustive.txt">
@@ -38,6 +44,9 @@
     </Text>
     <Text Include="TestSingleState\SingleState.txt">
       <Filter>TestSingleState</Filter>
+    </Text>
+    <Text Include="TestCompositeState\CompositeState.txt">
+      <Filter>TestCompositeState</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
@@ -76,6 +85,18 @@
     </ClInclude>
     <ClInclude Include="TestSingleState\States.hpp">
       <Filter>TestSingleState</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCompositeState\Interfaces.hpp">
+      <Filter>TestCompositeState</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCompositeState\StateIds.hpp">
+      <Filter>TestCompositeState</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCompositeState\StateMachine.hpp">
+      <Filter>TestCompositeState</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCompositeState\States.hpp">
+      <Filter>TestCompositeState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

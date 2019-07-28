@@ -164,15 +164,11 @@
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc" />
     <ClCompile Include="ActionWithArgument\ActionWithArgumentTest.cpp" />
     <ClCompile Include="AlignmentTest.cpp" />
-    <ClCompile Include="CompositeState\CompositeStateTest.cpp" />
     <ClCompile Include="FunctionTest.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="SingleState\SingleStateTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActionWithArgument\ActionWithArgument.hpp" />
-    <ClInclude Include="CompositeState\CompositeState.hpp" />
-    <ClInclude Include="SingleState\SingleState.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

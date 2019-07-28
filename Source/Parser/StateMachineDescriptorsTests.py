@@ -1,5 +1,5 @@
 ﻿import unittest
-from StateMachineDescriptors import State, StateType, InternalTransition, StateTransition, ChoiceTransition
+from StateMachineDescriptors import State, StateType, InternalTransition, InitialTransition, StateTransition, ChoiceTransition
 from StateMachineDescriptors import Guard, SimpleGuard, NotGuard, AndGuard, OrGuard, EntryExit
 import Helpers
 
@@ -194,6 +194,33 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertTrue(s1_1.merge(s1_2))
         self.assertEqual(s1_1.name, 'S1')
         self.assertEqual(s1_1.lineno, [1, 2])
+
+    def test_merge_initial_transition(self) -> None:
+        s1_1 = Helpers.TestState(name='S1', lineno=1, initial_transition=InitialTransition(toState='S2'))
+        s1_2 = Helpers.TestState(name='S1', lineno=2)
+
+        self.assertTrue(s1_1.merge(s1_2))
+        self.assertEqual(s1_1.name, 'S1')
+        self.assertEqual(s1_1.lineno, [1, 2])
+        self.assertIsNotNone(s1_1.initial_transition)
+        self.assertEqual(s1_1.initial_transition.toState, 'S2')
+        self.assertIsNone(s1_1.initial_transition.action)
+
+        s2_1 = Helpers.TestState(name='S2', lineno=1)
+        s2_2 = Helpers.TestState(name='S2', lineno=2, initial_transition=InitialTransition(toState='S3', action='A1'))
+
+        self.assertTrue(s2_1.merge(s2_2))
+        self.assertEqual(s2_1.name, 'S2')
+        self.assertEqual(s2_1.lineno, [1, 2])
+        self.assertIsNotNone(s2_1.initial_transition)
+        self.assertEqual(s2_1.initial_transition.toState, 'S3')
+        self.assertEqual(s2_1.initial_transition.action, 'A1')
+
+    def test_merge_two_initial_transitions_is_not_possible(self) -> None:
+        s1_1 = Helpers.TestState(name='S1', lineno=1, initial_transition=InitialTransition(toState='S2'))
+        s1_2 = Helpers.TestState(name='S1', lineno=2, initial_transition=InitialTransition(toState='S3'))
+
+        self.assertFalse(s1_1.merge(s1_2))
 
     def test_simple_guard(self) -> None:
         g = SimpleGuard('G1', 0)

@@ -189,6 +189,14 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
 
         self.assertDoesNotContainErrorMessage('State \'S\' (line(s) [0]) is not reachable')
 
+    def test_state_is_reachable_through_initial_transition(self) -> None:
+        initial = Helpers.InitialState('S1')
+        s1 = Helpers.TestState(name='S1', initial_transition=InitialTransition(toState='S2'))
+        s2 = Helpers.TestState(name='S2')
+        self.analyzer.analyze([initial, s1, s2])
+
+        self.assertDoesNotContainErrorMessage('State \'S2\' (line(s) [0]) is not reachable')
+
     def test_parent_state_is_reachable_when_child_state_is_reachable(self) -> None:
         initial = Helpers.InitialState('S')
         p1 = Helpers.TestState(name='P1')
