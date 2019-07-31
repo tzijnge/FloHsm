@@ -22,3 +22,4 @@ __pycache__
 /Source/Generated/TestCompositeState/StateIds.hpp
 /Source/Generated/TestCompositeState/StateMachine.hpp
 /Source/Generated/TestCompositeState/States.hpp
+/Source/Parser/parsetab.py

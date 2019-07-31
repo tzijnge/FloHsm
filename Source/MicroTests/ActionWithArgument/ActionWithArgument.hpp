@@ -9,7 +9,7 @@
 ' Integers can be specified in decimal form or hexadecimal form with '0x' prefix. Hexadecimal form is case insensitive. No exponent notation allowed
 ' Boolean can be specified as 'true' or 'false', case insensitive
 ' float can be specified in normal form. No exponent notation allowed
-' string can be specified between double qoutes
+' string can be specified between double quotes
 '
 ' Boundary checking is done by the parser
 

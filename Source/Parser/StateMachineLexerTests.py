@@ -84,6 +84,24 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.lexer.input('|')
         self.assertToken(self.lexer.token(), 'OR', '|')
 
+    def test_DoubleQuote(self) -> None:
+        self.lexer.input('"')
+        self.assertToken(self.lexer.token(), 'DOUBLE_QUOTE', '"')
+
+    def test_Integer(self) -> None:
+        self.lexer.input('111-222+333')
+        self.assertToken(self.lexer.token(), 'INT', '111')
+        self.assertToken(self.lexer.token(), 'INT', '-222')
+        self.assertToken(self.lexer.token(), 'INT', '+333')
+
+    def test_IntegerHex(self) -> None:
+        self.lexer.input('0xAB 0X6D -0x11 +0x4f')
+
+        self.assertToken(self.lexer.token(), 'INT', '0xAB')
+        self.assertToken(self.lexer.token(), 'INT', '0X6D')
+        self.assertToken(self.lexer.token(), 'INT', '-0x11')
+        self.assertToken(self.lexer.token(), 'INT', '+0x4f')
+
     def test_Name(self) -> None:
         self.lexer.input('_ _1 _a a A b1 B0')
         self.assertToken(self.lexer.token(), 'NAME', '_')
@@ -95,13 +113,13 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.assertToken(self.lexer.token(), 'NAME', 'B0')
 
     def test_InvalidToken(self) -> None:
-        self.lexer.input('0')
-        self.assertToken(self.lexer.token(), 'lexerror', '0')
+        self.lexer.input('^')
+        self.assertToken(self.lexer.token(), 'lexerror', '^')
 
     def test_InvalidTokenBetweenValidTokens(self) -> None:
-        self.lexer.input('A 0 B')
+        self.lexer.input('A ^ B')
         self.assertToken(self.lexer.token(), 'NAME', 'A')
-        self.assertToken(self.lexer.token(), 'lexerror', '0')
+        self.assertToken(self.lexer.token(), 'lexerror', '^')
         self.assertToken(self.lexer.token(), 'NAME', 'B')
 
     def test_MultipleTokens(self) -> None:
