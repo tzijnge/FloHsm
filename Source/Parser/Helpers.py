@@ -1,4 +1,6 @@
-from StateMachineDescriptors import State, StateType, Guard, SimpleGuard, EntryExit, InternalTransition, StateTransition, InitialTransition, ChoiceTransition
+from StateMachineDescriptors import State, StateType, Guard, SimpleGuard, EntryExit, \
+                                    InternalTransition, StateTransition, InitialTransition, \
+                                    ChoiceTransition, Action
 import unittest
 from typing import Optional, Any, List
 
@@ -7,8 +9,8 @@ class FloHsmTester(unittest.TestCase):
     def assertState(self, s:State, name:str, parent:str=None, 
                     num_int_transitions:int=0, num_state_transitions:int=0,
                     num_choice_transitions:int=0,
-                    entry_guard:str=None, entry_action:str=None,
-                    exit_guard:str=None, exit_action:str=None, is_composite:bool=False,
+                    entry_guard:str=None, entry_action:Action=None,
+                    exit_guard:str=None, exit_action:Action=None, is_composite:bool=False,
                     state_type:StateType=StateType.NORMAL) -> None:
 
         self.assertEqual(name, s.name)
@@ -23,7 +25,9 @@ class FloHsmTester(unittest.TestCase):
             self.assertIsNone(entry_guard, 'entry guard is only allowed when entry has an action')
         else:
             assert s.entry is not None
-            self.assertEqual(entry_action, s.entry.action)
+            self.assertEqual(entry_action.name, s.entry.action.name)
+            self.assertEqual(entry_action.type, s.entry.action.type)
+            self.assertEqual(entry_action.value, s.entry.action.value)
             if entry_guard is None:
                 self.assertIsNone(s.entry.guard)
             else:
@@ -35,7 +39,7 @@ class FloHsmTester(unittest.TestCase):
             self.assertIsNone(exit_guard, 'exit guard is only allowed when exit has an action')
         else:
             assert s.exit is not None
-            self.assertEqual(exit_action, s.exit.action)
+            self.assertEqual(exit_action.name, s.exit.action.name)
             if exit_guard is None:
                 self.assertIsNone(s.exit.guard)
             else:
@@ -44,21 +48,28 @@ class FloHsmTester(unittest.TestCase):
 
         self.assertEqual(is_composite, s.is_composite)
 
-    def assertInternalTransition(self, t:InternalTransition, to:str=None, event:str=None, guard:Guard=None, action:str=None) -> None:
+    def assertInternalTransition(self, t:InternalTransition, event:str=None, guard:Guard=None, action:Action=None) -> None:
         self.assertEqual(event, t.event)
-        self.assertEqual(action, t.action)
+        if action:
+            self.assertEqual(action.name, t.action.name)
 
         if guard is None:
             self.assertIsNone(t.guard)
         else:
             assert t.guard is not None
             self.assertIsNotNone(t.guard)
-            self.assertEqual(guard, t.guard.to_string())
+            self.assertEqual(guard.to_string(), t.guard.to_string())
 
-    def assertStateTransition(self, t:StateTransition, to:str=None, event:str=None, guard:str=None, action:str=None) -> None:
+    def assertStateTransition(self, t:StateTransition, to:str=None, 
+                              event:str=None, guard:str=None, 
+                              action:Action=None) -> None:
         self.assertEqual(to, t.toState)
         self.assertEqual(event, t.event)
-        self.assertEqual(action, t.action)
+        if action:
+            assert t.action
+            self.assertEqual(action.name, t.action.name)
+            self.assertEqual(action.type, t.action.type)
+            self.assertEqual(action.value, t.action.value)
 
         if guard is None:
             self.assertIsNone(t.guard)
@@ -72,7 +83,7 @@ class FloHsmTester(unittest.TestCase):
         self.assertEqual(action, t.action)
         self.assertEqual(guard, t.guard.to_string())
 
-    def assertInitialTransition(self, t:Optional[InitialTransition], to:str, action:str=None) -> None:
+    def assertInitialTransition(self, t:Optional[InitialTransition], to:str, action:Action=None) -> None:
         self.assertIsNotNone(t)
         assert t is not None
 
@@ -81,7 +92,8 @@ class FloHsmTester(unittest.TestCase):
         if action is None:
             self.assertIsNone(t.action)
         else:
-            self.assertEqual(action, t.action)
+            assert t.action is not None
+            self.assertEqual(action.name, t.action.name)
 
     def assertSimpleGuard(self, g:Optional[Guard], guard_expression:str) -> None:
         self.assertGuard(g, guard_expression, [guard_expression])
@@ -116,7 +128,7 @@ class TestGuard(SimpleGuard):
         super().__init__(guard=guard, lineno=0)
 
 class InitialState(State):
-    def __init__(self, name:str, initial_action:str=None):
+    def __init__(self, name:str, initial_action:Action=None):
         super().__init__(name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7',
                                 initial_transition=InitialTransition(toState=name, action=initial_action),
                                 lineno=0)

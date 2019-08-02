@@ -1,6 +1,7 @@
 ﻿import unittest
 from StateMachineSemanticAnalyzer import SemanticAnalyzer
-from StateMachineDescriptors import State, StateType, InternalTransition, StateTransition, InitialTransition, ChoiceTransition
+from StateMachineDescriptors import State, StateType, InternalTransition, StateTransition,\
+                                    InitialTransition, ChoiceTransition, Action
 from StateMachineDescriptors import SimpleGuard, OrGuard, AndGuard, NotGuard, EntryExit
 from typing import List, Optional
 import Helpers
@@ -116,7 +117,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertState(self.analyzer.states[0], name='S', parent='P1')
 
     def test_state_name_cannot_equal_event_name(self) -> None:
-        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='S', action='A') ])
+        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='S', action=Action('A')) ])
         self.analyzer.analyze([s])
 
         self.assertContainsErrorMessage('State name \'S\' is also used as event name')
@@ -125,7 +126,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertState(self.analyzer.states[0], name='S', num_int_transitions=1)
 
     def test_state_name_cannot_equal_guard_name(self) -> None:
-        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='E', action='A', guard=Helpers.TestGuard('S')) ])
+        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='E', action=Action('A'), guard=Helpers.TestGuard('S')) ])
         self.analyzer.analyze([s])
 
         self.assertContainsErrorMessage('State name \'S\' is also used as guard name')
@@ -134,7 +135,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertState(self.analyzer.states[0], name='S', num_int_transitions=1)
 
     def test_state_name_cannot_equal_action_name(self) -> None:
-        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='E', action='S') ])
+        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='E', action=Action('S')) ])
         self.analyzer.analyze([s])
 
         self.assertContainsErrorMessage('State name \'S\' is also used as action name')
@@ -143,7 +144,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertState(self.analyzer.states[0], name='S', num_int_transitions=1)
 
     def test_event_name_cannot_equal_guard_name(self) -> None:
-        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='EE', action='A', guard=Helpers.TestGuard('EE')) ])
+        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='EE', action=Action('A'), guard=Helpers.TestGuard('EE')) ])
         self.analyzer.analyze([s])
 
         self.assertContainsErrorMessage('Event name \'EE\' is also used as guard name')
@@ -152,7 +153,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertState(self.analyzer.states[0], name='S', num_int_transitions=1)
 
     def test_event_name_cannot_equal_action_name(self) -> None:
-        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='EE', action='EE') ])
+        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='EE', action=Action('EE')) ])
         self.analyzer.analyze([s])
 
         self.assertContainsErrorMessage('Event name \'EE\' is also used as action name')
@@ -161,7 +162,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertState(self.analyzer.states[0], name='S', num_int_transitions=1)
 
     def test_guard_name_cannot_equal_action_name(self) -> None:
-        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='E', guard=Helpers.TestGuard('G1'), action='G1') ])
+        s = Helpers.TestState(name='S', internal_transitions=[ InternalTransition(event='E', guard=Helpers.TestGuard('G1'), action=Action('G1')) ])
         self.analyzer.analyze([s])
 
         self.assertContainsErrorMessage('Guard name \'G1\' is also used as action name')
@@ -276,7 +277,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
 
     def test_state_transition_to_self(self) -> None:
         i = Helpers.InitialState('S1')
-        s1 = Helpers.TestState(name='S1', state_transitions=[StateTransition(toState='S1', event='E1', action='A1')])
+        s1 = Helpers.TestState(name='S1', state_transitions=[StateTransition(toState='S1', event='E1', action=Action('A1'))])
 
         self.analyzer.analyze([i, s1])
         self.assertEqual(2, len(self.analyzer.states))
@@ -285,7 +286,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
     def test_state_transition_to_parent(self) -> None:
         i = Helpers.InitialState('S1')
         p1 = Helpers.TestState(name='P1')
-        s1 = Helpers.TestState(name='S1', parent='P1', state_transitions=[StateTransition(toState='P1', event='E1', action='A1')])
+        s1 = Helpers.TestState(name='S1', parent='P1', state_transitions=[StateTransition(toState='P1', event='E1', action=Action('A1'))])
 
 
         self.analyzer.analyze([i, p1, s1])
@@ -294,7 +295,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
 
     def test_state_transition_to_child(self) -> None:
         i = Helpers.InitialState('P1')
-        p1 = Helpers.TestState(name='P1', state_transitions=[StateTransition(toState='S1', event='E1', action='A1')])
+        p1 = Helpers.TestState(name='P1', state_transitions=[StateTransition(toState='S1', event='E1', action=Action('A1'))])
         s1 = Helpers.TestState(name='S1', parent='P1')
 
 
@@ -303,14 +304,14 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertEqual(0, len(self.analyzer.errors))
 
     def test_extract_all_actions(self) -> None:
-        i = Helpers.InitialState('P1', 'A0')
+        i = Helpers.InitialState('P1', Action('A0'))
         s1 = Helpers.TestState(name='S1',
-                       entry=EntryExit(action='A1'),
-                       exit=EntryExit(action='A2'),
-                       state_transitions=[StateTransition(toState='S1', event='E1', action='A3')],
-                       internal_transitions=[InternalTransition(event='E2', action='A4')])
+                       entry=EntryExit(action=Action('A1')),
+                       exit=EntryExit(action=Action('A2')),
+                       state_transitions=[StateTransition(toState='S1', event='E1', action=Action('A3'))],
+                       internal_transitions=[InternalTransition(event='E2', action=Action('A4'))])
 
-        choice1 = Helpers.TestState(name='S2', state_type=StateType.CHOICE, choice_transitions=[ChoiceTransition('S3', guard=Helpers.TestGuard('G1'), action='A5')])
+        choice1 = Helpers.TestState(name='S2', state_type=StateType.CHOICE, choice_transitions=[ChoiceTransition('S3', guard=Helpers.TestGuard('G1'), action=Action('A5'))])
 
         self.analyzer.analyze([i, s1, choice1])
         self.assertEqual(6, len(self.analyzer.action_names))
@@ -322,12 +323,12 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertIn('A5', self.analyzer.action_names)
 
     def test_extract_all_guards(self) -> None:
-        i = Helpers.InitialState('P1', 'A0')
+        i = Helpers.InitialState('P1', Action('A0'))
         s1 = Helpers.TestState(name='S1',
-                       entry=EntryExit(action='A1', guard=AndGuard(Helpers.TestGuard('G1'), Helpers.TestGuard('G2'))),
-                       exit=EntryExit(action='A2', guard=AndGuard(Helpers.TestGuard('G3'), Helpers.TestGuard('G4'))),
-                       state_transitions=[StateTransition(toState='S1', event='E1', action='A3', guard=AndGuard(Helpers.TestGuard('G5'), Helpers.TestGuard('G6')))],
-                       internal_transitions=[InternalTransition(event='E2', action='A4', guard=AndGuard(Helpers.TestGuard('G7'), Helpers.TestGuard('G8')))])
+                       entry=EntryExit(action=Action('A1'), guard=AndGuard(Helpers.TestGuard('G1'), Helpers.TestGuard('G2'))),
+                       exit=EntryExit(action=Action('A2'), guard=AndGuard(Helpers.TestGuard('G3'), Helpers.TestGuard('G4'))),
+                       state_transitions=[StateTransition(toState='S1', event='E1', action=Action('A3'), guard=AndGuard(Helpers.TestGuard('G5'), Helpers.TestGuard('G6')))],
+                       internal_transitions=[InternalTransition(event='E2', action=Action('A4'), guard=AndGuard(Helpers.TestGuard('G7'), Helpers.TestGuard('G8')))])
 
         choice1 = Helpers.TestState(name='S2', state_type=StateType.CHOICE, choice_transitions=[ChoiceTransition('S3', guard=AndGuard(Helpers.TestGuard('G9'), Helpers.TestGuard('G10')))])
 
@@ -345,8 +346,10 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         self.assertIn('G10', self.analyzer.guard_names)
 
     def test_extract_all_events(self) -> None:
-        s1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition('E1', 'A1'), InternalTransition('E2', 'A2') ])
-        s2 = Helpers.TestState(name='S2', state_transitions=[StateTransition('E3', 'S1'), StateTransition('E4', 'S2') ])
+        s1 = Helpers.TestState(name='S1', internal_transitions=\
+            [InternalTransition('E1', Action('A1')), InternalTransition('E2', Action('A2')) ])
+        s2 = Helpers.TestState(name='S2', state_transitions=\
+            [StateTransition('E3', 'S1'), StateTransition('E4', 'S2') ])
 
         self.analyzer.analyze([s1, s2])
         self.assertEqual(4, len(self.analyzer.event_names))
@@ -363,10 +366,10 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
 
         initial = Helpers.InitialState('S1')
         s1 = Helpers.TestState(name='S1',
-                       entry=EntryExit(action='A1', guard=g1),
-                       exit=EntryExit(action='A2', guard=g2),
-                       state_transitions=[StateTransition(toState='S1', event='E1', action='A3', guard=g3)],
-                       internal_transitions=[InternalTransition(event='E2', action='A4', guard=g4)])
+                       entry=EntryExit(action=Action('A1'), guard=g1),
+                       exit=EntryExit(action=Action('A2'), guard=g2),
+                       state_transitions=[StateTransition(toState='S1', event='E1', action=Action('A3'), guard=g3)],
+                       internal_transitions=[InternalTransition(event='E2', action=Action('A4'), guard=g4)])
 
         self.analyzer.analyze([initial, s1])
         self.assertEqual(4, len(self.analyzer.warnings))
@@ -385,10 +388,10 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
 
         initial = Helpers.InitialState('S1')
         s1 = Helpers.TestState(name='S1',
-                       entry=EntryExit(action='A1', guard=g1),
-                       exit=EntryExit(action='A2', guard=g2),
-                       state_transitions=[StateTransition(toState='S1', event='E1', action='A3', guard=g3)],
-                       internal_transitions=[InternalTransition(event='E2', action='A4', guard=g4)])
+                       entry=EntryExit(action=Action('A1'), guard=g1),
+                       exit=EntryExit(action=Action('A2'), guard=g2),
+                       state_transitions=[StateTransition(toState='S1', event='E1', action=Action('A3'), guard=g3)],
+                       internal_transitions=[InternalTransition(event='E2', action=Action('A4'), guard=g4)])
 
         self.analyzer.analyze([initial, s1])
         self.assertEqual(4, len(self.analyzer.warnings))
@@ -410,12 +413,12 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         # (!D || (F && ! E))
         g5 = OrGuard(NotGuard(Helpers.TestGuard('D')), AndGuard(Helpers.TestGuard('F'), NotGuard(Helpers.TestGuard('E'))))
 
-        st1 = StateTransition(toState='S1', event='E1', action='A1', guard=g1) # conflicts with st2
-        st2 = StateTransition(toState='S2', event='E1', action='A2', guard=g1)
-        st3 = StateTransition(toState='S1', event='E2', action='A3', guard=g2) # conflicts with it3
-        it1 = InternalTransition(event='E3', action='A4', guard=g4) # conflicts with it2
-        it2 = InternalTransition(event='E3', action='A5', guard=g5)
-        it3 = InternalTransition(event='E2', action='A6', guard=g3)
+        st1 = StateTransition(toState='S1', event='E1', action=Action('A1'), guard=g1) # conflicts with st2
+        st2 = StateTransition(toState='S2', event='E1', action=Action('A2'), guard=g1)
+        st3 = StateTransition(toState='S1', event='E2', action=Action('A3'), guard=g2) # conflicts with it3
+        it1 = InternalTransition(event='E3', action=Action('A4'), guard=g4) # conflicts with it2
+        it2 = InternalTransition(event='E3', action=Action('A5'), guard=g5)
+        it3 = InternalTransition(event='E2', action=Action('A6'), guard=g3)
 
         initial = Helpers.InitialState('S1')
         s1 = Helpers.TestState(name='S1',  state_transitions=[st1, st2, st3], internal_transitions=[it1, it2, it3])
@@ -436,9 +439,9 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         # (A && !C)
         g3 = AndGuard(Helpers.TestGuard('A'), NotGuard(Helpers.TestGuard('C')))
 
-        st1 = StateTransition(toState='S1', event='E1', action='A1', guard=g1)
-        st2 = StateTransition(toState='S2', event='E1', action='A2', guard=g2)
-        st3 = StateTransition(toState='S1', event='E1', action='A3', guard=g3)
+        st1 = StateTransition(toState='S1', event='E1', action=Action('A1'), guard=g1)
+        st2 = StateTransition(toState='S2', event='E1', action=Action('A2'), guard=g2)
+        st3 = StateTransition(toState='S1', event='E1', action=Action('A3'), guard=g3)
 
         initial = Helpers.InitialState('S1')
         s1 = Helpers.TestState(name='S1',  state_transitions=[st1, st2, st3])
@@ -458,9 +461,9 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
         # (A || !C)
         g3 = OrGuard(Helpers.TestGuard('A'), NotGuard(Helpers.TestGuard('C')))
 
-        st1 = StateTransition(toState='S1', event='E1', action='A1', guard=g1)
-        st2 = StateTransition(toState='S2', event='E1', action='A2', guard=g2)
-        st3 = StateTransition(toState='S1', event='E1', action='A3', guard=g3)
+        st1 = StateTransition(toState='S1', event='E1', action=Action('A1'), guard=g1)
+        st2 = StateTransition(toState='S2', event='E1', action=Action('A2'), guard=g2)
+        st3 = StateTransition(toState='S1', event='E1', action=Action('A3'), guard=g3)
 
         initial = Helpers.InitialState('S1')
         s1 = Helpers.TestState(name='S1',  state_transitions=[st1, st2, st3])
@@ -474,7 +477,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
     def test_choice_pseudo_state_cannot_have_entry(self) -> None:
         initial = Helpers.InitialState('S')
         s1 = Helpers.TestState(name='S', lineno=123, state_type=StateType.CHOICE)
-        s2 = Helpers.TestState(name='S', lineno=321, entry=EntryExit(action='A', guard=SimpleGuard('G', 0)))
+        s2 = Helpers.TestState(name='S', lineno=321, entry=EntryExit(action=Action('A'), guard=SimpleGuard('G', 0)))
 
         self.analyzer.analyze([initial, s1, s2])
 
@@ -485,7 +488,7 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
     def test_choice_pseudo_state_cannot_have_exit(self) -> None:
         initial = Helpers.InitialState('S')
         s1 = Helpers.TestState(name='S', lineno=111, state_type=StateType.CHOICE)
-        s2 = Helpers.TestState(name='S', lineno=333, exit=EntryExit(action='A', guard=SimpleGuard('G', 0)))
+        s2 = Helpers.TestState(name='S', lineno=333, exit=EntryExit(action=Action('A'), guard=SimpleGuard('G', 0)))
 
         self.analyzer.analyze([initial, s1, s2])
 
@@ -496,8 +499,8 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
     def test_choice_pseudo_state_cannot_have_internal_transitions(self) -> None:
         initial = Helpers.InitialState('S')
         s1 = Helpers.TestState(name='S', lineno=512, state_type=StateType.CHOICE)
-        s2 = Helpers.TestState(name='S', lineno=652, internal_transitions=[InternalTransition(event='E1', action='A1')])
-        s3 = Helpers.TestState(name='S', lineno=321, internal_transitions=[InternalTransition(event='E2', action='A2')])
+        s2 = Helpers.TestState(name='S', lineno=652, internal_transitions=[InternalTransition(event='E1', action=Action('A1'))])
+        s3 = Helpers.TestState(name='S', lineno=321, internal_transitions=[InternalTransition(event='E2', action=Action('A2'))])
 
         self.analyzer.analyze([initial, s1, s2, s3])
 

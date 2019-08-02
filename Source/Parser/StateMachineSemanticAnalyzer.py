@@ -235,34 +235,34 @@ class SemanticAnalyzer(object):
             if initial_transition is not None:
                 action = initial_transition.action
                 if action is not None:
-                    self.action_names.add(action)
+                    self.action_names.add(action.name)
 
             for st in state.state_transitions:
                 self.event_names.add(st.event)
                 if st.guard is not None:
                     self.guard_names.update(st.guard.guard_conditions())
                 if st.action is not None:
-                    self.action_names.add(st.action)
+                    self.action_names.add(st.action.name)
 
             for it in state.internal_transitions:
                 self.event_names.add(it.event)
                 if it.guard is not None:
                     self.guard_names.update(it.guard.guard_conditions())
                 if it.action is not None:
-                    self.action_names.add(it.action)
+                    self.action_names.add(it.action.name)
 
             for ct in state.choice_transitions:
                 self.guard_names.update(ct.guard.guard_conditions())
                 if ct.action is not None:
-                    self.action_names.add(ct.action)
+                    self.action_names.add(ct.action.name)
 
             if state.entry is not None:
-                self.action_names.add(state.entry.action)
+                self.action_names.add(state.entry.action.name)
                 if state.entry.guard is not None:
                     self.guard_names.update(state.entry.guard.guard_conditions())
 
             if state.exit is not None:
-                self.action_names.add(state.exit.action)
+                self.action_names.add(state.exit.action.name)
                 if state.exit.guard is not None:
                     self.guard_names.update(state.exit.guard.guard_conditions())
 

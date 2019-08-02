@@ -1,7 +1,7 @@
 ﻿import unittest
 from StateMachineParser import StateMachineParser
 import StateMachineGenerator
-from StateMachineDescriptors import Guard, State, StateType
+from StateMachineDescriptors import Guard, State, StateType, Action, ActionType
 import Helpers
 
 class Test_StateMachineParserTests(Helpers.FloHsmTester):
@@ -205,9 +205,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertState(self.parser.states[0], name='S1', num_int_transitions=1)
 
         it = self.parser.states[0].internal_transitions[0]
-        self.assertEqual('E1', it.event)
-        self.assertEqual('A1', it.action)
-        self.assertEqual(None, it.guard)
+        self.assertInternalTransition(it, event='E1', action=Action('A1'))
 
     def test_internal_transition_with_event_guard_and_action_using_keyword_state(self) -> None:   
         description = 'state S1: E1 [G1] / A1'
@@ -217,23 +215,21 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertState(self.parser.states[0], name='S1', num_int_transitions=1)
         
         it = self.parser.states[0].internal_transitions[0]
-        self.assertEqual('E1', it.event)
-        self.assertEqual('A1', it.action)
-        self.assertSimpleGuard(it.guard, 'G1')
+        self.assertInternalTransition(it, event='E1', guard=Helpers.TestGuard('G1'), action=Action('A1'))
     
     def test_entry_with_action_using_keyword_state(self) -> None:   
         description = 'state S1: <<entry>> / A1'
 
         self.parse(description)
         self.assertParseResult(num_states=1)
-        self.assertState(self.parser.states[0], name='S1', entry_action='A1')
+        self.assertState(self.parser.states[0], name='S1', entry_action=Action('A1'))
 
     def test_exit_with_action_and_guard_using_keyword_state(self) -> None:
         description = 'state S1: <<exit>> [G1] / A1'
 
         self.parse(description)
         self.assertParseResult(num_states=1)
-        self.assertState(self.parser.states[0], name='S1', exit_guard='G1', exit_action='A1')
+        self.assertState(self.parser.states[0], name='S1', exit_guard='G1', exit_action=Action('A1'))
 
     def test_internal_transition_with_event_and_action_without_keyword_state(self) -> None:   
         description = 'S1: E1 / A1'
@@ -243,9 +239,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertState(self.parser.states[0], name='S1', num_int_transitions=1)
 
         it = s = self.parser.states[0].internal_transitions[0]
-        self.assertEqual('E1', it.event)
-        self.assertEqual('A1', it.action)
-        self.assertEqual(None, it.guard)
+        self.assertInternalTransition(it, event='E1', action=Action('A1'))
 
     def test_internal_transition_with_event_guard_and_action_without_keyword_state(self) -> None:   
         description = 'S1: E1 [G1] / A1'
@@ -255,23 +249,21 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertState(self.parser.states[0], name='S1', num_int_transitions=1)
         
         it = self.parser.states[0].internal_transitions[0]
-        self.assertEqual('E1', it.event)
-        self.assertEqual('A1', it.action)
-        self.assertSimpleGuard(it.guard, 'G1')
+        self.assertInternalTransition(it, event='E1', guard=Helpers.TestGuard('G1'), action=Action('A1'))
 
     def test_entry_with_action_without_keyword_state(self) -> None:   
         description = 'S1: <<entry>> / A1'
 
         self.parse(description)
         self.assertParseResult(num_states=1)
-        self.assertState(self.parser.states[0], name='S1', entry_action='A1')
+        self.assertState(self.parser.states[0], name='S1', entry_action=Action('A1'))
 
     def test_exit_with_action_and_guard_without_keyword_state(self) -> None:   
         description = 'S1: <<exit>> [G1] / A1'
 
         self.parse(description)
         self.assertParseResult(num_states=1)
-        self.assertState(self.parser.states[0], name='S1', exit_guard='G1', exit_action='A1')
+        self.assertState(self.parser.states[0], name='S1', exit_guard='G1', exit_action=Action('A1'))
     
     # Valid state transitions
     def test_state_transition_with_event(self) -> None:   
@@ -302,7 +294,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
         self.assertState(self.parser.states[1], name='T')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='T', event='E1', action='A1')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='T', event='E1', action=Action('A1'))
 
     def test_state_transition_with_event_and_guard_and_action(self) -> None:   
         description = 'F --> T: E1 [G1] / A1'
@@ -312,7 +304,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
         self.assertState(self.parser.states[1], name='T')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='T', event='E1', guard='G1', action='A1')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='T', event='E1', guard='G1', action=Action('A1'))
 
     def test_initial_state_transition_without_action(self) -> None:   
         description = '[*] --> T'
@@ -332,7 +324,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
 
         self.assertState(self.parser.states[0], name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7')
         self.assertState(self.parser.states[1], name='T')
-        self.assertInitialTransition(self.parser.states[0].initial_transition, to='T', action='A1')
+        self.assertInitialTransition(self.parser.states[0].initial_transition, to='T', action=Action('A1'))
 
     def test_state_transition_to_final_with_event(self) -> None:   
         description = 'F --> [*] : E1'
@@ -362,7 +354,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
         self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', action='A1')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', action=Action('A1'))
 
     def test_state_transition_to_final_with_event_and_guard_and_action(self) -> None:   
         description = 'F --> [*]: E1 [G1] / A1'
@@ -372,7 +364,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
 
         self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
         self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
-        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', guard='G1', action='A1')
+        self.assertStateTransition(self.parser.states[0].state_transitions[0], to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', event='E1', guard='G1', action=Action('A1'))
 
     def test_initial_state_transition_to_final_without_action(self) -> None:   
         description = '[*] --> [*]'
@@ -392,7 +384,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
 
         self.assertState(self.parser.states[0], name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7')
         self.assertState(self.parser.states[1], name='FloHsmFinal_5OdpEA31BEcPrWrNx8u7')
-        self.assertInitialTransition(self.parser.states[0].initial_transition, to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', action='A1')
+        self.assertInitialTransition(self.parser.states[0].initial_transition, to='FloHsmFinal_5OdpEA31BEcPrWrNx8u7', action=Action('A1'))
 
     def test_internal_initial_transition(self) -> None:
         description = '''
@@ -566,6 +558,19 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         
         self.parse(description)
         self.assertParseResult(num_errors=1)
+
+    def test_action_with_argument_int(self) -> None:
+        description = 'F --> T: E1 / A1(10)'
+        
+        self.parse(description)
+        self.assertParseResult(num_states=2)
+        self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
+        self.assertState(self.parser.states[1], name='T')
+
+        t = self.parser.states[0].state_transitions[0]
+        self.assertStateTransition(t, to='T', event='E1', 
+                                   action=Action(name='A1', type=ActionType.INT, value='10'));
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

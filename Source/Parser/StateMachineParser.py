@@ -1,6 +1,8 @@
 ﻿import ply.yacc as yacc
 from StateMachineLexer import StateMachineLexer
-from StateMachineDescriptors import State, StateType, EntryExit, StateTransition, InitialTransition, InternalTransition, ChoiceTransition
+from StateMachineDescriptors import State, StateType, EntryExit, StateTransition, \
+                                    InitialTransition, InternalTransition, \
+                                    ChoiceTransition, Action, ActionType
 from StateMachineDescriptors import SimpleGuard, NotGuard, AndGuard, OrGuard
 import binascii
 from typing import List
@@ -110,7 +112,7 @@ class StateMachineParser(object):
 
     def p_action_at_initial_transition(self, p:yacc.Production) -> None:
         'action_at_initial_transition : COLON NAME'
-        p[0] = p[2]
+        p[0] = Action(name=p[2])
 
     def p_optional_action_at_initial_transition(self, p:yacc.Production) -> None:
         ''' optional_action_at_initial_transition : action_at_initial_transition
@@ -127,9 +129,15 @@ class StateMachineParser(object):
 
         p[0] = {'from' : fromState, 'to' : toState}
 
+    def p_action_with_argument_int(self, p:yacc.Production) -> None:
+        'action : FORWARD_SLASH NAME LPAREN INT RPAREN'
+           
+        p[0] = Action(name=p[2], type=ActionType.INT, value=p[4])
+
     def p_action(self, p:yacc.Production) -> None:
         'action : FORWARD_SLASH NAME'
-        p[0] = p[2]
+           
+        p[0] = Action(name=p[2])
 
     def p_optional_action(self, p:yacc.Production) -> None:
         ''' optional_action : action

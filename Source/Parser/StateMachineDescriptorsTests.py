@@ -1,5 +1,6 @@
 ﻿import unittest
-from StateMachineDescriptors import State, StateType, InternalTransition, InitialTransition, StateTransition, ChoiceTransition
+from StateMachineDescriptors import State, StateType, InternalTransition, InitialTransition,\
+                                    StateTransition, ChoiceTransition, Action
 from StateMachineDescriptors import Guard, SimpleGuard, NotGuard, AndGuard, OrGuard, EntryExit
 import Helpers
 
@@ -39,86 +40,86 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertState(s1_1, name='S1', parent='P1')
 
     def test_merge_equal_entry_statements(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', entry=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
-        s1_2 = Helpers.TestState(name='S1', entry=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
+        s1_1 = Helpers.TestState(name='S1', entry=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
+        s1_2 = Helpers.TestState(name='S1', entry=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
 
         self.assertFalse(s1_1.merge(s1_2))
 
     def test_merge_different_entry_statements(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', entry=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
-        s1_2 = Helpers.TestState(name='S1', entry=EntryExit(action='A2', guard=Helpers.TestGuard('G2')))
+        s1_1 = Helpers.TestState(name='S1', entry=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
+        s1_2 = Helpers.TestState(name='S1', entry=EntryExit(action=Action('A2'), guard=Helpers.TestGuard('G2')))
 
         self.assertFalse(s1_1.merge(s1_2))
 
     def test_merge_entry(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', entry=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
+        s1_1 = Helpers.TestState(name='S1', entry=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
         s1_2 = Helpers.TestState(name='S1')
 
         self.assertTrue(s1_1.merge(s1_2))
-        self.assertState(s1_1, name='S1', entry_action='A1', entry_guard='G1')
+        self.assertState(s1_1, name='S1', entry_action=Action('A1'), entry_guard='G1')
 
         s1_1 = Helpers.TestState(name='S1')
-        s1_2 = Helpers.TestState(name='S1', entry=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
+        s1_2 = Helpers.TestState(name='S1', entry=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
 
         self.assertTrue(s1_1.merge(s1_2))
-        self.assertState(s1_1, name='S1', entry_action='A1', entry_guard='G1')
+        self.assertState(s1_1, name='S1', entry_action=Action('A1'), entry_guard='G1')
 
     def test_merge_equal_exit_statements(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', exit=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
-        s1_2 = Helpers.TestState(name='S1', exit=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
+        s1_1 = Helpers.TestState(name='S1', exit=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
+        s1_2 = Helpers.TestState(name='S1', exit=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
 
         self.assertFalse(s1_1.merge(s1_2))
 
     def test_merge_different_exit_statements(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', exit=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
-        s1_2 = Helpers.TestState(name='S1', exit=EntryExit(action='A2', guard=Helpers.TestGuard('G2')))
+        s1_1 = Helpers.TestState(name='S1', exit=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
+        s1_2 = Helpers.TestState(name='S1', exit=EntryExit(action=Action('A2'), guard=Helpers.TestGuard('G2')))
 
         self.assertFalse(s1_1.merge(s1_2))
 
     def test_merge_exit(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', exit=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
+        s1_1 = Helpers.TestState(name='S1', exit=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
         s1_2 = Helpers.TestState(name='S1')
 
         self.assertTrue(s1_1.merge(s1_2))
-        self.assertState(s1_1, name='S1', exit_action='A1', exit_guard='G1')
+        self.assertState(s1_1, name='S1', exit_action=Action('A1'), exit_guard='G1')
 
         s1_1 = Helpers.TestState(name='S1')
-        s1_2 = Helpers.TestState(name='S1', exit=EntryExit(action='A1', guard=Helpers.TestGuard('G1')))
+        s1_2 = Helpers.TestState(name='S1', exit=EntryExit(action=Action('A1'), guard=Helpers.TestGuard('G1')))
 
         self.assertTrue(s1_1.merge(s1_2))
-        self.assertState(s1_1, name='S1', exit_action='A1', exit_guard='G1')
+        self.assertState(s1_1, name='S1', exit_action=Action('A1'), exit_guard='G1')
 
     def test_merge_internal_transitions_with_empty_list(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action='A1')])
+        s1_1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action=Action('A1'))])
         s1_2 = Helpers.TestState(name='S1')
 
         self.assertTrue(s1_1.merge(s1_2))
         self.assertState(s1_1, name='S1', num_int_transitions=1)
-        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action='A1')
+        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action=Action('A1'))
 
         s1_1 = Helpers.TestState(name='S1')
-        s1_2 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action='A1')])
+        s1_2 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action=Action('A1'))])
 
         self.assertTrue(s1_1.merge(s1_2))
         self.assertState(s1_1, name='S1', num_int_transitions=1)
-        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action='A1')
+        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action=Action('A1'))
 
     def test_merge_internal_transitions_from_two_states(self) -> None:
-        s1_1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action='A1')])
-        s1_2 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action='A1')])
+        s1_1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action=Action('A1'))])
+        s1_2 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action=Action('A1'))])
 
         self.assertTrue(s1_1.merge(s1_2))
         self.assertState(s1_1, name='S1', num_int_transitions=2)
-        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action='A1')
-        self.assertInternalTransition(s1_1.internal_transitions[1], event='E1', action='A1')
+        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action=Action('A1'))
+        self.assertInternalTransition(s1_1.internal_transitions[1], event='E1', action=Action('A1'))
 
-        s1_1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action='A1')])
-        s1_2 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E2', action='A1')])
+        s1_1 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E1', action=Action('A1'))])
+        s1_2 = Helpers.TestState(name='S1', internal_transitions=[InternalTransition(event='E2', action=Action('A1'))])
 
         self.assertTrue(s1_1.merge(s1_2))
         self.assertState(s1_1, name='S1', num_int_transitions=2)
-        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action='A1')
-        self.assertInternalTransition(s1_1.internal_transitions[1], event='E2', action='A1')
+        self.assertInternalTransition(s1_1.internal_transitions[0], event='E1', action=Action('A1'))
+        self.assertInternalTransition(s1_1.internal_transitions[1], event='E2', action=Action('A1'))
 
     def test_merge_state_transitions_with_empty_list(self) -> None:
         s1_1 = Helpers.TestState(name='S1', state_transitions=[StateTransition(toState='S2', event='E1')])
@@ -202,19 +203,16 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertTrue(s1_1.merge(s1_2))
         self.assertEqual(s1_1.name, 'S1')
         self.assertEqual(s1_1.lineno, [1, 2])
-        self.assertIsNotNone(s1_1.initial_transition)
-        self.assertEqual(s1_1.initial_transition.toState, 'S2')
-        self.assertIsNone(s1_1.initial_transition.action)
+
+        self.assertInitialTransition(s1_1.initial_transition, to='S2')
 
         s2_1 = Helpers.TestState(name='S2', lineno=1)
-        s2_2 = Helpers.TestState(name='S2', lineno=2, initial_transition=InitialTransition(toState='S3', action='A1'))
+        s2_2 = Helpers.TestState(name='S2', lineno=2, initial_transition=InitialTransition(toState='S3', action=Action('A1')))
 
         self.assertTrue(s2_1.merge(s2_2))
         self.assertEqual(s2_1.name, 'S2')
         self.assertEqual(s2_1.lineno, [1, 2])
-        self.assertIsNotNone(s2_1.initial_transition)
-        self.assertEqual(s2_1.initial_transition.toState, 'S3')
-        self.assertEqual(s2_1.initial_transition.action, 'A1')
+        self.assertInitialTransition(s1_1.initial_transition, to='S3', action=Action('A1'))
 
     def test_merge_two_initial_transitions_is_not_possible(self) -> None:
         s1_1 = Helpers.TestState(name='S1', lineno=1, initial_transition=InitialTransition(toState='S2'))
@@ -332,8 +330,8 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertEqual(4321, AndGuard(g2, g1).lineno())
 
     def test_all_events_of_state(self) -> None:
-        it1 = InternalTransition(event='E1', action='A1')
-        it2 = InternalTransition(event='E2', action='A2')
+        it1 = InternalTransition(event='E1', action=Action('A1'))
+        it2 = InternalTransition(event='E2', action=Action('A2'))
         st1 = StateTransition(event='E3', toState='S2')
         st2 = StateTransition(event='E4', toState='S2')
         st3 = StateTransition(event='E4', toState='S3')
@@ -346,7 +344,7 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertIn('E4', s.events())
 
     def test_all_guard_conditions_for_event(self) -> None:
-        it1 = InternalTransition(event='E2', action='A2', guard=Helpers.TestGuard('G1'))
+        it1 = InternalTransition(event='E2', action=Action('A2'), guard=Helpers.TestGuard('G1'))
         st1 = StateTransition(event='E2', toState='S2', guard=AndGuard(NotGuard(Helpers.TestGuard('G1')), Helpers.TestGuard('G2')))
 
         s = State(name='S', lineno=0, internal_transitions=[it1], state_transitions=[st1]);
@@ -357,8 +355,8 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertIn('G2', s.guard_conditions_for_event('E2'))
 
     def test_all_internal_transitions_for_event(self) -> None:
-        it1 = InternalTransition(event='E1', action='A1')
-        it2 = InternalTransition(event='E2', action='A2')
+        it1 = InternalTransition(event='E1', action=Action('A1'))
+        it2 = InternalTransition(event='E2', action=Action('A2'))
         st1 = StateTransition(event='E1', toState='S2')
         st2 = StateTransition(event='E4', toState='S2')
         st3 = StateTransition(event='E4', toState='S3')
@@ -368,8 +366,8 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         it = s.internal_transitions_for_event('E1')
 
     def test_all_state_transitions_for_event(self) -> None:
-        it1 = InternalTransition(event='E1', action='A1')
-        it2 = InternalTransition(event='E2', action='A2')
+        it1 = InternalTransition(event='E1', action=Action('A1'))
+        it2 = InternalTransition(event='E2', action=Action('A2'))
         st1 = StateTransition(event='E1', toState='S2')
         st2 = StateTransition(event='E4', toState='S2')
         st3 = StateTransition(event='E4', toState='S3')

@@ -126,32 +126,41 @@ class AndGuard(Guard):
     def lineno(self) -> int:
         return self.operands[0].lineno()
 
+class ActionType(Enum):
+    INT = 0
+
+class Action(object):
+    def __init__(self, name:str, type:ActionType=None, value:str=None) -> None:
+        self.name = name
+        self.type = type
+        self.value = value
+
 class InternalTransition(object):
-    def __init__(self, event:str, action:str, guard:Guard=None) -> None:
+    def __init__(self, event:str, action:Action, guard:Guard=None) -> None:
         self.event = event
         self.action = action
         self.guard = guard
 
 class StateTransition(object):
-    def __init__(self, event:str, toState:str, action:str=None, guard:Guard=None) -> None:
+    def __init__(self, event:str, toState:str, action:Action=None, guard:Guard=None) -> None:
         self.toState = toState
         self.event = event
         self.action = action
         self.guard = guard
 
 class InitialTransition(object):
-    def __init__(self, toState:str, action:str=None) -> None:
+    def __init__(self, toState:str, action:Action=None) -> None:
         self.toState = toState
         self.action = action
 
 class ChoiceTransition(object):
-    def __init__(self, toState:str, guard:Guard, action:str=None) -> None:
+    def __init__(self, toState:str, guard:Guard, action:Action=None) -> None:
         self.toState = toState
         self.guard = guard
         self.action = action
 
 class EntryExit():
-    def __init__(self, action:str, guard:Guard=None):
+    def __init__(self, action:Action, guard:Guard=None):
         self.guard = guard
         self.action = action
 
@@ -170,7 +179,7 @@ class State(object):
     merge_errors: List[str]
     name: str
     parent: Optional[str]
-    initial_transition: InitialTransition
+    initial_transition: Optional[InitialTransition]
     internal_transitions: List[InternalTransition]
     state_transitions: List[StateTransition]
     choice_transitions: List[ChoiceTransition]
