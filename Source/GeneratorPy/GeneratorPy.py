@@ -1,12 +1,12 @@
 ﻿import os
 import os.path
+import argparse
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Parser'))
-import argparse
 from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit
 from StateMachineParser import StateMachineParser
 from StateMachineSemanticAnalyzer import SemanticAnalyzer
-from typing import List, Dict, Set, Any
+from typing import List, Dict, Set, Any, Optional
 
 class StateWriter(object):
     lines: List[str]
@@ -61,16 +61,16 @@ class StateWriter(object):
 
                 if state.entry is not None:
                     if state.entry.guard is not None:                    
-                        self.write_if_statement(state.entry.guard.to_string(), ['actions->{}();'.format(state.entry.action)])
+                        self.write_if_statement(state.entry.guard.to_string(), ['actions->{}();'.format(state.entry.action.name)])
                     else:
-                        self.indent_and_append('actions->{}();'.format(state.entry.action))
+                        self.indent_and_append('actions->{}();'.format(state.entry.action.name))
 
                 it = state.initial_transition
                 if it is not None:
                     if it.action is None:
                         self.indent_and_append('SetTransitionDetails(StateId_{}, Function());'.format(it.toState))
                     else:
-                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(it.toState, it.action))
+                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(it.toState, it.action.name))
 
     def write_choice_constructor(self, state:State) -> None:
         with self.code_block():
@@ -80,7 +80,7 @@ class StateWriter(object):
             for ct in state.choice_transitions:
                 with self.if_block(ct.guard.to_string()):
                     if ct.action:
-                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(ct.toState, ct.action))
+                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(ct.toState, ct.action.name))
                     else:
                         self.indent_and_append('SetTransitionDetails(StateId_{}, Function());'.format(ct.toState))
 
@@ -110,9 +110,9 @@ class StateWriter(object):
                         self.indent_and_append('const bool {} = guards->{}();'.format(g, g))
 
                 if exit.guard is not None:
-                    self.write_if_statement(exit.guard.to_string(), ['actions->{}();'.format(exit.action)])
+                    self.write_if_statement(exit.guard.to_string(), ['actions->{}();'.format(exit.action.name)])
                 else:
-                    self.indent_and_append('actions->{}();'.format(exit.action))
+                    self.indent_and_append('actions->{}();'.format(exit.action.name))
 
     def write_destructor(self, state:State) -> None:
         self.indent_and_append('virtual ~{}()'.format(state.name))
@@ -124,7 +124,7 @@ class StateWriter(object):
 
     def write_state_transition(self, st:StateTransition) -> None:
         if st.action is not None:
-            action = 'Function(&IActions::{}, actions)'.format(st.action)
+            action = 'Function(&IActions::{}, actions)'.format(st.action.name)
         else:
             action = 'Function()'
 
@@ -136,7 +136,7 @@ class StateWriter(object):
             self.indent_and_append(transition)
 
     def write_internal_transition(self, it:InternalTransition) -> None:
-        action = 'actions->{}();'.format(it.action)
+        action = 'actions->{}();'.format(it.action.name)
         if it.guard is None:
             self.indent_and_append(action)
         else:
@@ -187,7 +187,7 @@ class StateWriter(object):
 
 
 
-destination_folder = None
+destination_folder:str
 
 def generate_event_interface_class(name:str, methods:Set[str]) -> List[str]:
     lines = ['class {}'.format(name),
@@ -219,7 +219,7 @@ def generate_guard_interface_class(name:str, methods:Set[str]) -> List[str]:
 def generate_interfaces(guard_names:Set[str], action_names:Set[str], event_names:Set[str]) -> None:
     file_name = 'Interfaces.hpp'
 
-    guard_names, action_names, event_names
+    #guard_names, action_names, event_names
 
     with open(os.path.join(destination_folder, file_name), "w") as f:
         lines = ['#pragma once']
@@ -406,7 +406,7 @@ def generate_statemachine(states:List[str], events:Set[str]) -> None:
 
         f.write('\n'.join(lines))
 
-def generate(input_file) -> None:
+def generate(input_file:str) -> None:
     with open(input_file, 'r') as f:
         parser = StateMachineParser()
         parser.parse(f.read())
