@@ -121,6 +121,12 @@ class StateMachineParser(object):
 
         p[0] = Action(name=p[1], type=ActionType.INT, value=p[3])
 
+    def p_action_impl_bool(self, p:yacc.Production) -> None:
+        '''action_impl : NAME LPAREN TRUE RPAREN
+                       | NAME LPAREN FALSE RPAREN'''
+
+        p[0] = Action(name=p[1], type=ActionType.BOOL, value=p[3])
+
     def p_action_at_initial_transition(self, p:yacc.Production) -> None:
         'action_at_initial_transition : COLON action_impl'
         p[0] = p[2]

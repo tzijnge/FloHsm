@@ -25,7 +25,9 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.lexer.input('  \t    \t')
 
     def test_State(self) -> None:
-        self.lexer.input('state')
+        self.lexer.input('state State STATE')
+        self.assertToken(self.lexer.token(), 'STATE', 'state')
+        self.assertToken(self.lexer.token(), 'STATE', 'state')
         self.assertToken(self.lexer.token(), 'STATE', 'state')
 
     def test_entry(self) -> None:
@@ -102,8 +104,18 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.assertToken(self.lexer.token(), 'INT', '-0x11')
         self.assertToken(self.lexer.token(), 'INT', '+0x4f')
 
+    def test_Bool(self) -> None:
+        self.lexer.input('true false True False tRuE FaLSe')
+
+        self.assertToken(self.lexer.token(), 'TRUE', 'true')
+        self.assertToken(self.lexer.token(), 'FALSE', 'false')
+        self.assertToken(self.lexer.token(), 'TRUE', 'true')
+        self.assertToken(self.lexer.token(), 'FALSE', 'false')
+        self.assertToken(self.lexer.token(), 'TRUE', 'true')
+        self.assertToken(self.lexer.token(), 'FALSE', 'false')
+
     def test_Name(self) -> None:
-        self.lexer.input('_ _1 _a a A b1 B0')
+        self.lexer.input('_ _1 _a a A b1 B0 states falsetto')
         self.assertToken(self.lexer.token(), 'NAME', '_')
         self.assertToken(self.lexer.token(), 'NAME', '_1')
         self.assertToken(self.lexer.token(), 'NAME', '_a')
@@ -111,6 +123,8 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.assertToken(self.lexer.token(), 'NAME', 'A')
         self.assertToken(self.lexer.token(), 'NAME', 'b1')
         self.assertToken(self.lexer.token(), 'NAME', 'B0')
+        self.assertToken(self.lexer.token(), 'NAME', 'states')
+        self.assertToken(self.lexer.token(), 'NAME', 'falsetto')
 
     def test_InvalidToken(self) -> None:
         self.lexer.input('^')

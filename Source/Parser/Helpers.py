@@ -78,10 +78,15 @@ class FloHsmTester(unittest.TestCase):
             self.assertIsNotNone(t.guard)
             self.assertEqual(guard, t.guard.to_string())
 
-    def assertChoiceTransition(self, t:ChoiceTransition, to:str, guard:str, action:str=None) -> None:
+    def assertChoiceTransition(self, t:ChoiceTransition, to:str, guard:str, action:Action=None) -> None:
         self.assertEqual(to, t.toState)
-        self.assertEqual(action, t.action)
         self.assertEqual(guard, t.guard.to_string())
+
+        if action:
+            assert t.action
+            self.assertEqual(action.name, t.action.name)
+            self.assertEqual(action.type, t.action.type)
+            self.assertEqual(action.value, t.action.value)
 
     def assertInitialTransition(self, t:Optional[InitialTransition], to:str, action:Action=None) -> None:
         self.assertIsNotNone(t)
@@ -89,11 +94,11 @@ class FloHsmTester(unittest.TestCase):
 
         self.assertEqual(to, t.toState)
 
-        if action is None:
-            self.assertIsNone(t.action)
-        else:
-            assert t.action is not None
+        if action:
+            assert t.action
             self.assertEqual(action.name, t.action.name)
+            self.assertEqual(action.type, t.action.type)
+            self.assertEqual(action.value, t.action.value)
 
     def assertSimpleGuard(self, g:Optional[Guard], guard_expression:str) -> None:
         self.assertGuard(g, guard_expression, [guard_expression])

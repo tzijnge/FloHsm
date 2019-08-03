@@ -40,7 +40,9 @@ class StateMachineLexer(object):
         self.lexer.input(s)
 
     reserved = {
-        'state' : 'STATE'
+        'state' : 'STATE',
+        'true'  : 'TRUE',
+        'false'  : 'FALSE'
         }
 
     tokens = [
@@ -111,17 +113,11 @@ class StateMachineLexer(object):
 
     def t_NAME(self, t:lex.Token) -> lex.Token:
         r'[a-zA-Z_][a-zA-Z0-9_]*'
-        if t.value in self.reserved:
+        if t.value.lower() in self.reserved:
+            t.value = t.value.lower()
             t.type = self.reserved[ t.value ]
         return t
 
     def t_INT(self, t:lex.Token) -> lex.Token:
         r'(?P<sign>[-+]?)(?P<value>(?P<hex>0[xX][0-9a-fA-F]+)|(?P<dec>[0-9]+))'
         return t
-
-#lexer = lex.lex(debug=0)
-
-#lexer.input(TestData)
-
-#for tok in lexer:
-#    print(tok)

@@ -325,7 +325,7 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertState(self.parser.states[0], name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7')
         self.assertState(self.parser.states[1], name='T')
         self.assertInitialTransition(self.parser.states[0].initial_transition, to='T', \
-            action=Action(name='A1', type='int', value='10'))
+            action=Action(name='A1', type=ActionType.INT, value='10'))
 
     def test_state_transition_to_final_with_event(self) -> None:   
         description = 'F --> [*] : E1'
@@ -583,6 +583,30 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         t = self.parser.states[0].state_transitions[0]
         self.assertStateTransition(t, to='T', event='E1', 
                                    action=Action(name='A1'));
+
+    def test_action_with_argument_true(self) -> None:
+        description = 'F --> T: E1 / A1(true)'
+        
+        self.parse(description)
+        self.assertParseResult(num_states=2)
+        self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
+        self.assertState(self.parser.states[1], name='T')
+
+        t = self.parser.states[0].state_transitions[0]
+        self.assertStateTransition(t, to='T', event='E1', 
+                                   action=Action(name='A1', type=ActionType.BOOL, value='true'));
+
+    def test_action_with_argument_false(self) -> None:
+        description = 'F --> T: E1 / A1(FALSe)'
+        
+        self.parse(description)
+        self.assertParseResult(num_states=2)
+        self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
+        self.assertState(self.parser.states[1], name='T')
+
+        t = self.parser.states[0].state_transitions[0]
+        self.assertStateTransition(t, to='T', event='E1', 
+                                   action=Action(name='A1', type=ActionType.BOOL, value='false'));
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)

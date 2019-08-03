@@ -127,10 +127,12 @@ class AndGuard(Guard):
         return self.operands[0].lineno()
 
 class ActionType(Enum):
-    INT = 0
+    NONE = 0
+    INT = 1
+    BOOL = 2
 
 class Action(object):
-    def __init__(self, name:str, type:ActionType=None, value:str=None) -> None:
+    def __init__(self, name:str, type:ActionType=ActionType.NONE, value:str=None) -> None:
         self.name = name
         self.type = type
         self.value = value
