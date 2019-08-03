@@ -572,5 +572,17 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertStateTransition(t, to='T', event='E1', 
                                    action=Action(name='A1', type=ActionType.INT, value='10'));
 
+    def test_action_with_only_parentheses(self) -> None:
+        description = 'F --> T: E1 / A1()'
+        
+        self.parse(description)
+        self.assertParseResult(num_states=2)
+        self.assertState(self.parser.states[0], name='F', num_state_transitions=1)
+        self.assertState(self.parser.states[1], name='T')
+
+        t = self.parser.states[0].state_transitions[0]
+        self.assertStateTransition(t, to='T', event='E1', 
+                                   action=Action(name='A1'));
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

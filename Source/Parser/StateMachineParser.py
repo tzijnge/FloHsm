@@ -111,7 +111,8 @@ class StateMachineParser(object):
         p[0] = {'from' : fromState, 'to' : toState}
 
     def p_action_impl(self, p:yacc.Production) -> None:
-        'action_impl : NAME'
+        '''action_impl : NAME
+                       | NAME LPAREN RPAREN'''
 
         p[0] = Action(name=p[1])
 
