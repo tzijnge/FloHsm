@@ -317,14 +317,15 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         self.assertInitialTransition(self.parser.states[0].initial_transition, to='T')
 
     def test_initial_state_transition_with_action(self) -> None:   
-        description = '[*] --> T: A1'
+        description = '[*] --> T: A1(10)'
 
         self.parse(description)
         self.assertParseResult(num_states=2)
 
         self.assertState(self.parser.states[0], name='FloHsmInitial_5OdpEA31BEcPrWrNx8u7')
         self.assertState(self.parser.states[1], name='T')
-        self.assertInitialTransition(self.parser.states[0].initial_transition, to='T', action=Action('A1'))
+        self.assertInitialTransition(self.parser.states[0].initial_transition, to='T', \
+            action=Action(name='A1', type='int', value='10'))
 
     def test_state_transition_to_final_with_event(self) -> None:   
         description = 'F --> [*] : E1'
@@ -570,7 +571,6 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
         t = self.parser.states[0].state_transitions[0]
         self.assertStateTransition(t, to='T', event='E1', 
                                    action=Action(name='A1', type=ActionType.INT, value='10'));
-
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
