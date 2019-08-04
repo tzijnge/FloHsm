@@ -86,10 +86,6 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.lexer.input('|')
         self.assertToken(self.lexer.token(), 'OR', '|')
 
-    def test_DoubleQuote(self) -> None:
-        self.lexer.input('"')
-        self.assertToken(self.lexer.token(), 'DOUBLE_QUOTE', '"')
-
     def test_Integer(self) -> None:
         self.lexer.input('111-222+333')
         self.assertToken(self.lexer.token(), 'INT', '111')
@@ -127,6 +123,15 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.assertToken(self.lexer.token(), 'FLOAT', '-1.5e+1')
         self.assertToken(self.lexer.token(), 'FLOAT', '+2.3E-9')
         self.assertToken(self.lexer.token(), 'FLOAT', '.44e7')
+
+    def test_String(self) -> None:
+        self.lexer.input(r'"Test123:\n \"FloHSM\"" "state" "true" "<<choice>>" ""')
+
+        self.assertToken(self.lexer.token(), 'STRING', r'"Test123:\n \"FloHSM\""')
+        self.assertToken(self.lexer.token(), 'STRING', r'"state"')
+        self.assertToken(self.lexer.token(), 'STRING', r'"true"')
+        self.assertToken(self.lexer.token(), 'STRING', r'"<<choice>>"')
+        self.assertToken(self.lexer.token(), 'STRING', r'""')
 
     def test_Name(self) -> None:
         self.lexer.input('_ _1 _a a A b1 B0 states falsetto')

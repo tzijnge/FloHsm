@@ -45,6 +45,7 @@ class StateMachineLexer(object):
         'TRANSITION',
         'INT',
         'FLOAT',
+        'STRING',
         #'PLANT_UML_START_MARKER',
         #'PLANT_UML_END_MARKER'
         'NEWLINE'
@@ -60,7 +61,6 @@ class StateMachineLexer(object):
     t_NOT = r'!'
     t_AND = r'&'
     t_OR = r'\|'
-    t_DOUBLE_QUOTE = r'"'
     t_FORWARD_SLASH = r'/'
     t_STATE_INITIAL_OR_FINAL = r'\[[*]\]' # matches '[*]'
     t_CHOICE = r'<<choice>>'
@@ -106,4 +106,12 @@ class StateMachineLexer(object):
 
     def t_INT(self, t:lex.Token) -> lex.Token:
         r'(?P<sign>[-+]?)(?P<value>(?P<hex>0[xX][0-9a-fA-F]+)|(?P<dec>[0-9]+))'
+        return t
+
+    # Match the sequence of:
+    # a double-quote
+    # any character from white-space to tilde, 0 or more times, non-greedy
+    # a double quote that is not preceeded by a backslash
+    def t_STRING(self, t:lex.Token) -> lex.Token:
+        r'"[ -~]*?(?<=[^\\])"'
         return t
