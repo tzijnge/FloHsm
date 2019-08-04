@@ -114,6 +114,20 @@ class Test_StateMachineLexerTests(unittest.TestCase):
         self.assertToken(self.lexer.token(), 'TRUE', 'true')
         self.assertToken(self.lexer.token(), 'FALSE', 'false')
 
+    def test_Float(self) -> None:
+        self.lexer.input('.123 12.34 -1.123 +1.23 12. 1.e2 2.E4 -1.5e+1 +2.3E-9 .44e7')
+
+        self.assertToken(self.lexer.token(), 'FLOAT', '.123')
+        self.assertToken(self.lexer.token(), 'FLOAT', '12.34')
+        self.assertToken(self.lexer.token(), 'FLOAT', '-1.123')
+        self.assertToken(self.lexer.token(), 'FLOAT', '+1.23')
+        self.assertToken(self.lexer.token(), 'FLOAT', '12.')
+        self.assertToken(self.lexer.token(), 'FLOAT', '1.e2')
+        self.assertToken(self.lexer.token(), 'FLOAT', '2.E4')
+        self.assertToken(self.lexer.token(), 'FLOAT', '-1.5e+1')
+        self.assertToken(self.lexer.token(), 'FLOAT', '+2.3E-9')
+        self.assertToken(self.lexer.token(), 'FLOAT', '.44e7')
+
     def test_Name(self) -> None:
         self.lexer.input('_ _1 _a a A b1 B0 states falsetto')
         self.assertToken(self.lexer.token(), 'NAME', '_')

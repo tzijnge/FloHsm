@@ -1,28 +1,7 @@
 ﻿import ply.lex as lex
 from typing import List
 
-TestData= '''
-@startuml
-
-state MyState1{
-}
-
-state choice1 <<choice>>
-
-[*] --> S : InitialAction
-
-S : entry / EntryAction
-S : exit / ExitAction
-S : E1 / A1
-S : E4 [G1] / A4
-S : E5 [G2] / A5
-S : E5 [!G2] / A6
-
-S --> S : E2 / A2
-S --> [*] : E3 / A3
-
-@enduml
-'''
+# Enter the regular expressions ar regex101.com for a detailed explanation
 
 class StateMachineLexer(object):
     finalTokens : List[str]
@@ -65,6 +44,7 @@ class StateMachineLexer(object):
         'EXIT',
         'TRANSITION',
         'INT',
+        'FLOAT',
         #'PLANT_UML_START_MARKER',
         #'PLANT_UML_END_MARKER'
         'NEWLINE'
@@ -116,6 +96,12 @@ class StateMachineLexer(object):
         if t.value.lower() in self.reserved:
             t.value = t.value.lower()
             t.type = self.reserved[ t.value ]
+        return t
+
+    # Note that the order of t_FLOAT and t_INT is important. If they are declared in reversed order,
+    # something like '12.34' will first trigger the INT rule for '12'
+    def t_FLOAT(self, t:lex.Token) -> lex.Token:
+        r'(?P<sign>[+-])?(?P<float>\d*\.\d*)(?P<exp>[eE][+-]?\d+)?'
         return t
 
     def t_INT(self, t:lex.Token) -> lex.Token:
