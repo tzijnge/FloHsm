@@ -130,6 +130,7 @@ class ActionType(Enum):
     NONE = 0
     INT = 1
     BOOL = 2
+    FLOAT = 3
 
 class Action(object):
     def __init__(self, name:str, type:ActionType=ActionType.NONE, value:str=None) -> None:
