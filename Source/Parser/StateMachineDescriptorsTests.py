@@ -212,7 +212,7 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
         self.assertTrue(s2_1.merge(s2_2))
         self.assertEqual(s2_1.name, 'S2')
         self.assertEqual(s2_1.lineno, [1, 2])
-        self.assertInitialTransition(s1_1.initial_transition, to='S3', action=Action('A1'))
+        self.assertInitialTransition(s2_1.initial_transition, to='S3', action=Action('A1'))
 
     def test_merge_two_initial_transitions_is_not_possible(self) -> None:
         s1_1 = Helpers.TestState(name='S1', lineno=1, initial_transition=InitialTransition(toState='S2'))
