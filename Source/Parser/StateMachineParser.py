@@ -132,6 +132,11 @@ class StateMachineParser(object):
 
         p[0] = Action(name=p[1], type=ActionType.FLOAT, value=p[3])
 
+    def p_action_impl_string(self, p:yacc.Production) -> None:
+        'action_impl : NAME LPAREN STRING RPAREN'
+
+        p[0] = Action(name=p[1], type=ActionType.STRING, value=p[3])
+
     def p_action_at_initial_transition(self, p:yacc.Production) -> None:
         'action_at_initial_transition : COLON action_impl'
         p[0] = p[2]
