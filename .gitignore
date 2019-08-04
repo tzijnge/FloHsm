@@ -23,3 +23,8 @@ __pycache__
 /Source/Generated/TestCompositeState/StateMachine.hpp
 /Source/Generated/TestCompositeState/States.hpp
 /Source/Parser/parsetab.py
+/Source/Generated/TestActionWithArgument/ActionWithArgument.png
+/Source/Generated/TestActionWithArgument/Interfaces.hpp
+/Source/Generated/TestActionWithArgument/StateIds.hpp
+/Source/Generated/TestActionWithArgument/StateMachine.hpp
+/Source/Generated/TestActionWithArgument/States.hpp

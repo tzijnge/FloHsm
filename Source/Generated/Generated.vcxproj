@@ -88,7 +88,8 @@
       <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,7 +110,8 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\Sin
       <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -133,7 +135,8 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\Sin
       <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -158,12 +161,19 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\Sin
       <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
 python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt</Command>
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
+python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="TestActionWithArgument\TestActionWithArgument.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="TestChoice\TestChoicePseudoStates.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
@@ -179,12 +189,17 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\Sin
     <ClCompile Include="TestSingleState\TestSingleState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="TestActionWithArgument\ActionWithArgument.txt" />
     <Text Include="TestChoice\choice.txt" />
     <Text Include="TestCompositeState\CompositeState.txt" />
     <Text Include="TestExhaustive\exhaustive.txt" />
     <Text Include="TestSingleState\SingleState.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="TestActionWithArgument\Interfaces.hpp" />
+    <ClInclude Include="TestActionWithArgument\StateIds.hpp" />
+    <ClInclude Include="TestActionWithArgument\StateMachine.hpp" />
+    <ClInclude Include="TestActionWithArgument\States.hpp" />
     <ClInclude Include="TestChoice\Interfaces.hpp" />
     <ClInclude Include="TestChoice\StateIds.hpp" />
     <ClInclude Include="TestChoice\StateMachine.hpp" />

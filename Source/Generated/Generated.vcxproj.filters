@@ -17,6 +17,9 @@
     <ClCompile Include="TestCompositeState\TestCompositeState.cpp">
       <Filter>TestCompositeState</Filter>
     </ClCompile>
+    <ClCompile Include="TestActionWithArgument\TestActionWithArgument.cpp">
+      <Filter>TestActionWithArgument</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Gtest">
@@ -34,6 +37,9 @@
     <Filter Include="TestCompositeState">
       <UniqueIdentifier>{30a7217c-524e-4288-896c-3cc2b2400667}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestActionWithArgument">
+      <UniqueIdentifier>{760dbbc8-4c21-44fa-819a-05419856ad54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="TestExhaustive\exhaustive.txt">
@@ -47,6 +53,9 @@
     </Text>
     <Text Include="TestCompositeState\CompositeState.txt">
       <Filter>TestCompositeState</Filter>
+    </Text>
+    <Text Include="TestActionWithArgument\ActionWithArgument.txt">
+      <Filter>TestActionWithArgument</Filter>
     </Text>
   </ItemGroup>
   <ItemGroup>
@@ -97,6 +106,18 @@
     </ClInclude>
     <ClInclude Include="TestCompositeState\States.hpp">
       <Filter>TestCompositeState</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActionWithArgument\Interfaces.hpp">
+      <Filter>TestActionWithArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActionWithArgument\StateIds.hpp">
+      <Filter>TestActionWithArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActionWithArgument\StateMachine.hpp">
+      <Filter>TestActionWithArgument</Filter>
+    </ClInclude>
+    <ClInclude Include="TestActionWithArgument\States.hpp">
+      <Filter>TestActionWithArgument</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

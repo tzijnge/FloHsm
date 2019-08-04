@@ -1,4 +1,4 @@
-﻿from StateMachineDescriptors import State, StateType, Guard
+﻿from StateMachineDescriptors import State, StateType, Guard, Action
 from typing import Set, List, Dict, Optional
 
 class SemanticAnalyzer(object):
@@ -8,7 +8,7 @@ class SemanticAnalyzer(object):
     state_names : List[str]
     event_names : Set[str]
     guard_names : Set[str]
-    action_names  : Set[str]
+    actions : Set[Action]
     state_for_name : Dict[str, State]
 
     def __init__(self) -> None:
@@ -18,7 +18,7 @@ class SemanticAnalyzer(object):
         self.state_names = list()
         self.event_names = set()
         self.guard_names = set()
-        self.action_names = set()
+        self.actions = set()
         self.state_for_name = dict()
 
     def remove_reachable_states(self, reachable_root:State, possibly_unreachable_states:List[str]) -> None:
@@ -235,53 +235,55 @@ class SemanticAnalyzer(object):
             if initial_transition is not None:
                 action = initial_transition.action
                 if action is not None:
-                    self.action_names.add(action.name)
+                    self.actions.add(action)
 
             for st in state.state_transitions:
                 self.event_names.add(st.event)
                 if st.guard is not None:
                     self.guard_names.update(st.guard.guard_conditions())
                 if st.action is not None:
-                    self.action_names.add(st.action.name)
+                    self.actions.add(st.action)
 
             for it in state.internal_transitions:
                 self.event_names.add(it.event)
                 if it.guard is not None:
                     self.guard_names.update(it.guard.guard_conditions())
                 if it.action is not None:
-                    self.action_names.add(it.action.name)
+                    self.actions.add(it.action)
 
             for ct in state.choice_transitions:
                 self.guard_names.update(ct.guard.guard_conditions())
                 if ct.action is not None:
-                    self.action_names.add(ct.action.name)
+                    self.actions.add(ct.action)
 
             if state.entry is not None:
-                self.action_names.add(state.entry.action.name)
+                self.actions.add(state.entry.action)
                 if state.entry.guard is not None:
                     self.guard_names.update(state.entry.guard.guard_conditions())
 
             if state.exit is not None:
-                self.action_names.add(state.exit.action.name)
+                self.actions.add(state.exit.action)
                 if state.exit.guard is not None:
                     self.guard_names.update(state.exit.guard.guard_conditions())
+
+        action_names = [action.name for action in self.actions]
 
         for s in self.state_names:
             if s in self.event_names:
                 self.errors.append('State name \'{}\' is also used as event name'.format(s))
             if s in self.guard_names:
                 self.errors.append('State name \'{}\' is also used as guard name'.format(s))
-            if s in self.action_names:
+            if s in action_names:
                 self.errors.append('State name \'{}\' is also used as action name'.format(s))
 
         for e in self.event_names:
             if e in self.guard_names:
                 self.errors.append('Event name \'{}\' is also used as guard name'.format(e))
-            if e in self.action_names:
+            if e in action_names:
                 self.errors.append('Event name \'{}\' is also used as action name'.format(e))
 
         for guard in self.guard_names:
-            if guard in self.action_names:
+            if guard in action_names:
                 self.errors.append('Guard name \'{}\' is also used as action name'.format(guard))
 
         self.analyze_guard_expressions_always_true_or_false()

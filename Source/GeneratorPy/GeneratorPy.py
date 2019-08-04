@@ -3,7 +3,7 @@ import os.path
 import argparse
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Parser'))
-from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit
+from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit, Action
 from StateMachineParser import StateMachineParser
 from StateMachineSemanticAnalyzer import SemanticAnalyzer
 from typing import List, Dict, Set, Any, Optional
@@ -198,12 +198,12 @@ def generate_event_interface_class(name:str, methods:Set[str]) -> List[str]:
     lines.append('};')
     return lines
 
-def generate_action_interface_class(name:str, methods:Set[str]) -> List[str]:
+def generate_action_interface_class(name:str, actions:Set[Action]) -> List[str]:
     lines = ['class {}'.format(name),
              '{',
              'public:',
              '    virtual ~{}() {}'.format(name, '{}')]
-    lines.extend(['    virtual void {}() = 0;'.format(m) for m in methods])
+    lines.extend(['    virtual void {}() = 0;'.format(a.name) for a in actions])
     lines.append('};')
     return lines
 
@@ -216,10 +216,8 @@ def generate_guard_interface_class(name:str, methods:Set[str]) -> List[str]:
     lines.append('};')
     return lines
 
-def generate_interfaces(guard_names:Set[str], action_names:Set[str], event_names:Set[str]) -> None:
+def generate_interfaces(guard_names:Set[str], actions:Set[Action], event_names:Set[str]) -> None:
     file_name = 'Interfaces.hpp'
-
-    #guard_names, action_names, event_names
 
     with open(os.path.join(destination_folder, file_name), "w") as f:
         lines = ['#pragma once']
@@ -228,7 +226,7 @@ def generate_interfaces(guard_names:Set[str], action_names:Set[str], event_names
         lines.append('{')
         lines.extend(generate_guard_interface_class('IGuards', guard_names))
         lines.append('')
-        lines.extend(generate_action_interface_class('IActions', action_names))
+        lines.extend(generate_action_interface_class('IActions', actions))
         lines.append('')
         lines.extend(generate_event_interface_class('IEvents', event_names))
         lines.append('')
@@ -427,7 +425,7 @@ def generate(input_file:str) -> None:
                 print (w)
             return
     
-    generate_interfaces(semantic_analyzer.guard_names, semantic_analyzer.action_names, semantic_analyzer.event_names)
+    generate_interfaces(semantic_analyzer.guard_names, semantic_analyzer.actions, semantic_analyzer.event_names)
     generate_state_ids(semantic_analyzer.states)
     generate_states(semantic_analyzer.states)
     generate_statemachine(semantic_analyzer.state_names, semantic_analyzer.event_names)
