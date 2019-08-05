@@ -162,13 +162,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc" />
-    <ClCompile Include="ActionWithArgument\ActionWithArgumentTest.cpp" />
     <ClCompile Include="AlignmentTest.cpp" />
     <ClCompile Include="FunctionTest.cpp" />
     <ClCompile Include="Main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ActionWithArgument\ActionWithArgument.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

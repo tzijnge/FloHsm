@@ -3,23 +3,12 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="FunctionTest.cpp" />
-    <ClCompile Include="ActionWithArgument\ActionWithArgumentTest.cpp">
-      <Filter>ActionWithArgument</Filter>
-    </ClCompile>
     <ClCompile Include="AlignmentTest.cpp" />
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc">
       <Filter>Gtest</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActionWithArgument\ActionWithArgument.hpp">
-      <Filter>ActionWithArgument</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="ActionWithArgument">
-      <UniqueIdentifier>{64b83148-dd68-4246-9bbd-9c2434bd88c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Gtest">
       <UniqueIdentifier>{a034b379-3866-437e-bac8-24865179b00c}</UniqueIdentifier>
     </Filter>

@@ -2,47 +2,6 @@
 #include "StateMachine.hpp"
 #include <functional>
 
-/*
-    class StateMachine : public StateMachineBase
-    {
-    public:
-        StateMachine()
-        {
-			InitStateMachine();
-        }
-
-        std::string Log() const { return log; }
-
-    private:
-        void AddToLog(const std::string& l)
-        {
-            if (!log.empty()) { log += ':'; }
-            log += l;
-        }
-
-        void EntryS0() override { AddToLog("EntryS0"); }
-        void ExitS0() override { AddToLog("ExitS0"); }
-        void EntryS1() override { AddToLog("EntryS1"); }
-        void ExitS1() override { AddToLog("ExitS1"); }
-        void EntryS2() override { AddToLog("EntryS2"); }
-        void ExitS2() override { AddToLog("ExitS2"); }
-        void EntryS3() override { AddToLog("EntryS3"); }
-        void ExitS3() override { AddToLog("ExitS3"); }
-        void A0() override { AddToLog("A0"); }
-        void A1() override { AddToLog("A1"); }
-        void A2() override { AddToLog("A2"); }
-        void A3() override { AddToLog("A3"); }
-        void A4() override { AddToLog("A4"); }
-        void A5() override { AddToLog("A5"); }
-        void A6() override { AddToLog("A6"); }
-        void A7() override { AddToLog("A7"); }
-        void A8() override { AddToLog("A8"); }
-        void A9() override { AddToLog("A9"); }
-
-        std::string log;
-    };
-*/
-
 class TestCompositeState : public StateMachine, public testing::Test
 {
 public:
