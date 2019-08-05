@@ -139,6 +139,29 @@ class Action(object):
         self.type = type
         self.value = value
 
+    def prototype_string(self) -> str:
+        arg: str = ''
+        if self.type == ActionType.NONE:
+            arg = ''
+        elif self.type == ActionType.INT:
+            arg = 'int i'
+        elif self.type == ActionType.FLOAT:
+            arg = 'float f'
+        elif self.type == ActionType.BOOL:
+            arg = 'bool b'
+        elif self.type == ActionType.STRING:
+            arg = 'const char* s'
+        else:
+            assert False, 'Invalid ActionType ({})'.format(self.type)
+
+        return 'void {}({})'.format(self.name, arg)
+
+    def invocation_string(self) -> str:
+        value_postfix = 'f' if self.type == ActionType.FLOAT else ''
+        value = self.value or ''
+
+        return '{}({}{})'.format(self.name, value, value_postfix)
+
 class InternalTransition(object):
     def __init__(self, event:str, action:Action, guard:Guard=None) -> None:
         self.event = event

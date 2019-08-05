@@ -1,6 +1,6 @@
 ﻿import unittest
 from StateMachineDescriptors import State, StateType, InternalTransition, InitialTransition,\
-                                    StateTransition, ChoiceTransition, Action
+                                    StateTransition, ChoiceTransition, Action, ActionType
 from StateMachineDescriptors import Guard, SimpleGuard, NotGuard, AndGuard, OrGuard, EntryExit
 import Helpers
 
@@ -375,6 +375,24 @@ class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
 
         self.assertEqual(1, len(s.state_transitions_for_event('E1')))
         st = s.state_transitions_for_event('E1')
+
+    def test_action_prototype_and_invocation_strings(self) -> None:
+        a1 = Action(name='A1', type=ActionType.INT, value='10')
+        a2 = Action(name='A2', type=ActionType.FLOAT, value='12.34')
+        a3 = Action(name='A3', type=ActionType.BOOL, value='true')
+        a4 = Action(name='A4', type=ActionType.STRING, value='"Test123"')
+        a5 = Action(name='A5')
+
+        self.assertEqual('void A1(int i)', a1.prototype_string())
+        self.assertEqual('A1(10)', a1.invocation_string())
+        self.assertEqual('void A2(float f)', a2.prototype_string())
+        self.assertEqual('A2(12.34f)', a2.invocation_string())
+        self.assertEqual('void A3(bool b)', a3.prototype_string())
+        self.assertEqual('A3(true)', a3.invocation_string())
+        self.assertEqual('void A4(const char* s)', a4.prototype_string())
+        self.assertEqual('A4("Test123")', a4.invocation_string())
+        self.assertEqual('void A5()', a5.prototype_string())
+        self.assertEqual('A5()', a5.invocation_string())
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
