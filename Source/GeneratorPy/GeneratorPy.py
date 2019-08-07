@@ -3,7 +3,7 @@ import os.path
 import argparse
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Parser'))
-from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit, Action
+from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit, Action, ActionType
 from StateMachineParser import StateMachineParser
 from StateMachineSemanticAnalyzer import SemanticAnalyzer
 from typing import List, Dict, Set, Any, Optional
@@ -51,6 +51,17 @@ class StateWriter(object):
             for body_line in body:
                 self.indent_and_append(body_line)
 
+    def write_transition_details(self, to_state:str, action:Optional[Action]) -> None:
+        action_str:str = ''
+        if action is None:
+            action_str ='Function()'
+        elif action.type == ActionType.NONE:
+            action_str = 'Function(&IActions::{}, actions)'.format(action.name)
+        else:
+            action_str = 'Function(&IActions::{}, actions, {})'.format(action.name, action.value())
+
+        self.indent_and_append('SetTransitionDetails(StateId_{}, {});'.format(to_state, action_str))
+
     def write_constructor_body(self, state:State) -> None:
         with self.code_block():
             with self.if_block('MustCallEntry(Id, fromState, toState)'):
@@ -61,16 +72,13 @@ class StateWriter(object):
 
                 if state.entry is not None:
                     if state.entry.guard is not None:                    
-                        self.write_if_statement(state.entry.guard.to_string(), ['actions->{}();'.format(state.entry.action.name)])
+                        self.write_if_statement(state.entry.guard.to_string(), ['actions->{};'.format(state.entry.action.invocation_string())])
                     else:
-                        self.indent_and_append('actions->{}();'.format(state.entry.action.name))
+                        self.indent_and_append('actions->{};'.format(state.entry.action.invocation_string()))
 
                 it = state.initial_transition
                 if it is not None:
-                    if it.action is None:
-                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function());'.format(it.toState))
-                    else:
-                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(it.toState, it.action.name))
+                    self.write_transition_details(it.toState, it.action)
 
     def write_choice_constructor(self, state:State) -> None:
         with self.code_block():
@@ -79,10 +87,7 @@ class StateWriter(object):
 
             for ct in state.choice_transitions:
                 with self.if_block(ct.guard.to_string()):
-                    if ct.action:
-                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function(&IActions::{}, actions));'.format(ct.toState, ct.action.name))
-                    else:
-                        self.indent_and_append('SetTransitionDetails(StateId_{}, Function());'.format(ct.toState))
+                    self.write_transition_details(ct.toState, ct.action)
 
     def write_constructor(self, state:State) -> None:
         if state.parent or state.entry or state.initial_transition:
@@ -110,9 +115,9 @@ class StateWriter(object):
                         self.indent_and_append('const bool {} = guards->{}();'.format(g, g))
 
                 if exit.guard is not None:
-                    self.write_if_statement(exit.guard.to_string(), ['actions->{}();'.format(exit.action.name)])
+                    self.write_if_statement(exit.guard.to_string(), ['actions->{};'.format(exit.action.invocation_string())])
                 else:
-                    self.indent_and_append('actions->{}();'.format(exit.action.name))
+                    self.indent_and_append('actions->{};'.format(exit.action.invocation_string()))
 
     def write_destructor(self, state:State) -> None:
         self.indent_and_append('virtual ~{}()'.format(state.name))
@@ -123,24 +128,20 @@ class StateWriter(object):
             self.write_destructor_body(state.exit)
 
     def write_state_transition(self, st:StateTransition) -> None:
-        if st.action is not None:
-            action = 'Function(&IActions::{}, actions)'.format(st.action.name)
-        else:
-            action = 'Function()'
-
-        transition = 'SetTransitionDetails(StateId_{}, {});'.format(st.toState, action)
-
         if st.guard is not None:
-            self.write_if_statement(st.guard.to_string(), [transition])
+            with self.if_block(st.guard.to_string()):
+                self.write_transition_details(st.toState, st.action)
         else:
-            self.indent_and_append(transition)
+            self.write_transition_details(st.toState, st.action)
 
     def write_internal_transition(self, it:InternalTransition) -> None:
-        action = 'actions->{}();'.format(it.action.name)
-        if it.guard is None:
-            self.indent_and_append(action)
+        action = 'actions->{};'.format(it.action.invocation_string())
+
+        if it.guard is not None:
+            with self.if_block(it.guard.to_string()):
+                self.indent_and_append(action)
         else:
-            self.write_if_statement(it.guard.to_string(), [action])
+            self.indent_and_append(action)
 
     def write_event_method(self, event:str, state:State) -> None:
         self.indent_and_append('void {}() override'.format(event))
@@ -198,12 +199,12 @@ def generate_event_interface_class(name:str, methods:Set[str]) -> List[str]:
     lines.append('};')
     return lines
 
-def generate_action_interface_class(name:str, actions:Set[Action]) -> List[str]:
+def generate_action_interface_class(name:str, action_prototypes:Set[str]) -> List[str]:
     lines = ['class {}'.format(name),
              '{',
              'public:',
              '    virtual ~{}() {}'.format(name, '{}')]
-    lines.extend(['    virtual void {}() = 0;'.format(a.name) for a in actions])
+    lines.extend(['    virtual {} = 0;'.format(ap) for ap in action_prototypes])
     lines.append('};')
     return lines
 
@@ -216,7 +217,7 @@ def generate_guard_interface_class(name:str, methods:Set[str]) -> List[str]:
     lines.append('};')
     return lines
 
-def generate_interfaces(guard_names:Set[str], actions:Set[Action], event_names:Set[str]) -> None:
+def generate_interfaces(guard_names:Set[str], action_prototypes:Set[str], event_names:Set[str]) -> None:
     file_name = 'Interfaces.hpp'
 
     with open(os.path.join(destination_folder, file_name), "w") as f:
@@ -226,7 +227,7 @@ def generate_interfaces(guard_names:Set[str], actions:Set[Action], event_names:S
         lines.append('{')
         lines.extend(generate_guard_interface_class('IGuards', guard_names))
         lines.append('')
-        lines.extend(generate_action_interface_class('IActions', actions))
+        lines.extend(generate_action_interface_class('IActions', action_prototypes))
         lines.append('')
         lines.extend(generate_event_interface_class('IEvents', event_names))
         lines.append('')
@@ -425,7 +426,7 @@ def generate(input_file:str) -> None:
                 print (w)
             return
     
-    generate_interfaces(semantic_analyzer.guard_names, semantic_analyzer.actions, semantic_analyzer.event_names)
+    generate_interfaces(semantic_analyzer.guard_names, semantic_analyzer.action_prototypes, semantic_analyzer.event_names)
     generate_state_ids(semantic_analyzer.states)
     generate_states(semantic_analyzer.states)
     generate_statemachine(semantic_analyzer.state_names, semantic_analyzer.event_names)

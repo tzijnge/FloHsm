@@ -1,7 +1,7 @@
 ﻿import unittest
 from StateMachineSemanticAnalyzer import SemanticAnalyzer
 from StateMachineDescriptors import State, StateType, InternalTransition, StateTransition,\
-                                    InitialTransition, ChoiceTransition, Action
+                                    InitialTransition, ChoiceTransition, Action, ActionType
 from StateMachineDescriptors import SimpleGuard, OrGuard, AndGuard, NotGuard, EntryExit
 from typing import List, Optional
 import Helpers
@@ -312,16 +312,17 @@ class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
                        internal_transitions=[InternalTransition(event='E2', action=Action('A4'))])
 
         choice1 = Helpers.TestState(name='S2', state_type=StateType.CHOICE, choice_transitions=[ChoiceTransition('S3', guard=Helpers.TestGuard('G1'), action=Action('A5'))])
+        s3 = Helpers.TestState(name='S3', entry=EntryExit(action=Action('A1', ActionType.BOOL, 'true')))
 
-        self.analyzer.analyze([i, s1, choice1])
-        self.assertEqual(6, len(self.analyzer.actions))
-        action_names = [action.name for action in self.analyzer.actions]
-        self.assertIn('A0', action_names)
-        self.assertIn('A1', action_names)
-        self.assertIn('A2', action_names)
-        self.assertIn('A3', action_names)
-        self.assertIn('A4', action_names)
-        self.assertIn('A5', action_names)
+        self.analyzer.analyze([i, s1, choice1, s3])
+        self.assertEqual(7, len(self.analyzer.action_prototypes))
+        self.assertIn('void A0()', self.analyzer.action_prototypes)
+        self.assertIn('void A1()', self.analyzer.action_prototypes)
+        self.assertIn('void A1(bool b)', self.analyzer.action_prototypes)
+        self.assertIn('void A2()', self.analyzer.action_prototypes)
+        self.assertIn('void A3()', self.analyzer.action_prototypes)
+        self.assertIn('void A4()', self.analyzer.action_prototypes)
+        self.assertIn('void A5()', self.analyzer.action_prototypes)
 
     def test_extract_all_guards(self) -> None:
         i = Helpers.InitialState('P1', Action('A0'))

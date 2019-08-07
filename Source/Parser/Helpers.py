@@ -27,7 +27,7 @@ class FloHsmTester(unittest.TestCase):
             assert s.entry is not None
             self.assertEqual(entry_action.name, s.entry.action.name)
             self.assertEqual(entry_action.type, s.entry.action.type)
-            self.assertEqual(entry_action.value, s.entry.action.value)
+            self.assertEqual(entry_action.value(), s.entry.action.value())
             if entry_guard is None:
                 self.assertIsNone(s.entry.guard)
             else:
@@ -69,7 +69,7 @@ class FloHsmTester(unittest.TestCase):
             assert t.action
             self.assertEqual(action.name, t.action.name)
             self.assertEqual(action.type, t.action.type)
-            self.assertEqual(action.value, t.action.value)
+            self.assertEqual(action.value(), t.action.value())
 
         if guard is None:
             self.assertIsNone(t.guard)
@@ -86,7 +86,7 @@ class FloHsmTester(unittest.TestCase):
             assert t.action
             self.assertEqual(action.name, t.action.name)
             self.assertEqual(action.type, t.action.type)
-            self.assertEqual(action.value, t.action.value)
+            self.assertEqual(action.value(), t.action.value())
 
     def assertInitialTransition(self, t:Optional[InitialTransition], to:str, action:Action=None) -> None:
         self.assertIsNotNone(t)
@@ -98,7 +98,7 @@ class FloHsmTester(unittest.TestCase):
             assert t.action
             self.assertEqual(action.name, t.action.name)
             self.assertEqual(action.type, t.action.type)
-            self.assertEqual(action.value, t.action.value)
+            self.assertEqual(action.value(), t.action.value())
 
     def assertSimpleGuard(self, g:Optional[Guard], guard_expression:str) -> None:
         self.assertGuard(g, guard_expression, [guard_expression])

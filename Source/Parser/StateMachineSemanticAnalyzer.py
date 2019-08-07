@@ -8,7 +8,7 @@ class SemanticAnalyzer(object):
     state_names : List[str]
     event_names : Set[str]
     guard_names : Set[str]
-    actions : Set[Action]
+    action_prototypes : Set[str]
     state_for_name : Dict[str, State]
 
     def __init__(self) -> None:
@@ -18,7 +18,7 @@ class SemanticAnalyzer(object):
         self.state_names = list()
         self.event_names = set()
         self.guard_names = set()
-        self.actions = set()
+        self.action_prototypes = set()
         self.state_for_name = dict()
 
     def remove_reachable_states(self, reachable_root:State, possibly_unreachable_states:List[str]) -> None:
@@ -227,7 +227,9 @@ class SemanticAnalyzer(object):
                     self.errors.append('A choice pseudo state must have at least two outgoing transitions. See line(s) {}'.format(' and '.join(line_numbers)))
 
 
-        # Create list of state names, list of events, list of guards, list of actions
+        # Create list of state names, list of events, list of guards, list of action prototypes
+        actions: List[Action] = list()
+
         for state in self.states:
             self.state_names.append(state.name)
             
@@ -235,38 +237,41 @@ class SemanticAnalyzer(object):
             if initial_transition is not None:
                 action = initial_transition.action
                 if action is not None:
-                    self.actions.add(action)
+                    actions.append(action)
 
             for st in state.state_transitions:
                 self.event_names.add(st.event)
                 if st.guard is not None:
                     self.guard_names.update(st.guard.guard_conditions())
                 if st.action is not None:
-                    self.actions.add(st.action)
+                    actions.append(st.action)
 
             for it in state.internal_transitions:
                 self.event_names.add(it.event)
                 if it.guard is not None:
                     self.guard_names.update(it.guard.guard_conditions())
                 if it.action is not None:
-                    self.actions.add(it.action)
+                    actions.append(it.action)
 
             for ct in state.choice_transitions:
                 self.guard_names.update(ct.guard.guard_conditions())
                 if ct.action is not None:
-                    self.actions.add(ct.action)
+                    actions.append(ct.action)
 
             if state.entry is not None:
-                self.actions.add(state.entry.action)
+                actions.append(state.entry.action)
                 if state.entry.guard is not None:
                     self.guard_names.update(state.entry.guard.guard_conditions())
 
             if state.exit is not None:
-                self.actions.add(state.exit.action)
+                actions.append(state.exit.action)
                 if state.exit.guard is not None:
                     self.guard_names.update(state.exit.guard.guard_conditions())
 
-        action_names = [action.name for action in self.actions]
+        for a in actions:
+            self.action_prototypes.add(a.prototype_string())
+
+        action_names = [action.name for action in actions]
 
         for s in self.state_names:
             if s in self.event_names:

@@ -2,117 +2,66 @@
 
 #include <stdint.h>
 #include <cassert>
-#include  <new>
+#include <new>
+#include "Alignment.hpp"
 
-class Function
+
+template <int ArgSize>
+class FunctionWithMaxArgSize
 {
 public:
-    Function()
+    FunctionWithMaxArgSize()
     {
-        new (storage) NullCallable();
-    }
-
-    template <class T>
-    Function(void(T::*fn)(), T* t)
-    {
-        new (storage)Callable<T>(fn, t);
-    }
-
-    void operator()() const
-    {
-        (*reinterpret_cast<const CallableBase*>(storage))();
-    }
-
-private:
-    class CallableBase
-    {
-    public:
-	    virtual ~CallableBase() {}
-	    virtual void operator()() const = 0;
-
-    protected:
-        uint8_t functionStorage[sizeof(void*)];
-        uint8_t instanceStorage[sizeof(void*)];
-    };
-
-    template <class T>
-    class Callable : public CallableBase
-    {
-    public:
-        Callable(void(T::*fn)(), T* t)
-        {
-            assert(sizeof(void*) == sizeof(void(T::*)()));
-            assert(sizeof(void*) == sizeof(T*));
-
-            memcpy(&functionStorage[0], &fn, sizeof(void(T::*)()));
-            memcpy(&instanceStorage[0], &t, sizeof(void(T::*)()));
-        }
-
-	    void operator()() const override
-        {
-            void(T::*fn)();
-            T* t;
-
-            memcpy(&fn, &functionStorage[0], sizeof(void(T::*)()));
-            memcpy(&t, &instanceStorage[0], sizeof(void(T::*)()));
-            
-            (t->*fn)();
-        }
-    };
-
-    struct NullCallable : public CallableBase
-    {
-	    void operator()() const override {}
-    };
-
-    uint8_t storage[sizeof(CallableBase)];
-};
-
-template <class ArgType>
-class FunctionWithBoundArg
-{
-public:
-    FunctionWithBoundArg()
-    {
+        static_assert (sizeof(NullCallable) == sizeof(storage), "Insufficient storage to create object");
         new (storage)NullCallable();
     }
 
-    template <class T>
-    FunctionWithBoundArg(void(T::*fn)(ArgType), T* t, ArgType a)
+    template <class T, class ArgType>
+    FunctionWithMaxArgSize(void(T::*fn)(ArgType), T* t, ArgType a)
     {
-        new (storage)Callable<T>(fn, t, a);
+        static_assert(sizeof(ArgType) <= ArgSize, "sizeof(ArgType) is too big. You are trying to instantiate a Function object with an argument that exceeds the maximum size.");
+        static_assert (sizeof(CallableWithArg<T, ArgType>) == sizeof(storage), "Insufficient storage to create object");
+        new (storage)CallableWithArg<T, ArgType>(fn, t, a);
+    }
+
+    template <class T>
+    FunctionWithMaxArgSize(void(T::*fn)(), T* t)
+    {
+        static_assert (sizeof(CallableNoArg<T>) == sizeof(storage), "Insufficient storage to create object");
+        new (storage)CallableNoArg<T>(fn, t);
     }
 
     void operator()() const
     {
-        (*reinterpret_cast<const CallableBase*>(storage))();
+        (*reinterpret_cast<const Callable*>(storage))();
     }
 
 private:
-    class CallableBase
+    class Callable
     {
     public:
-        virtual ~CallableBase() {}
+        virtual ~Callable() {}
         virtual void operator()() const = 0;
 
     protected:
-        uint8_t functionStorage[sizeof(void*)];
-        uint8_t instanceStorage[sizeof(void*)];
-        uint8_t argumentStorage[sizeof(ArgType)];
+        char functionStorage[sizeof(void(Callable::*)())];
+        char instanceStorage[sizeof(void*)];
+        char argumentStorage[ArgSize];
     };
 
-    template <class T>
-    class Callable : public CallableBase
+    template <class T, class ArgType>
+    class CallableWithArg : public Callable
     {
     public:
-        Callable(void(T::*fn)(ArgType), T* t, ArgType a)
+        CallableWithArg(void(T::*fn)(ArgType), T* t, ArgType a)
         {
-            assert(sizeof(void*) == sizeof(void(T::*)()));
-            assert(sizeof(void*) == sizeof(T*));
+            static_assert(sizeof(Callable::functionStorage) == sizeof(void(T::*)()), "Function storage is too small to hold the pointer to member function");
+            static_assert(sizeof(Callable::instanceStorage) == sizeof(T*), "Instance storage is too small to hold the instance pointer");
+            static_assert(sizeof(Callable::argumentStorage) >= sizeof(ArgType), "Argument storage is too small to hold the argument");
 
-            memcpy(&functionStorage[0], &fn, sizeof(void(T::*)()));
-            memcpy(&instanceStorage[0], &t, sizeof(void(T::*)()));
-            memcpy(&argumentStorage[0], &a, sizeof(ArgType));
+            memcpy(Callable::functionStorage, &fn, sizeof(void(T::*)()));
+            memcpy(Callable::instanceStorage, &t, sizeof(T*));
+            memcpy(Callable::argumentStorage, &a, sizeof(ArgType));
         }
 
         void operator()() const override
@@ -121,31 +70,61 @@ private:
             T* t;
             ArgType a;
 
-            memcpy(&fn, &functionStorage[0], sizeof(void(T::*)()));
-            memcpy(&t, &instanceStorage[0], sizeof(void(T::*)()));
-            memcpy(&a, &argumentStorage[0], sizeof(ArgType));
+            memcpy(&fn, Callable::functionStorage, sizeof(void(T::*)()));
+            memcpy(&t, Callable::instanceStorage, sizeof(T*));
+            memcpy(&a, Callable::argumentStorage, sizeof(ArgType));
 
             (t->*fn)(a);
         }
     };
 
-    struct NullCallable : public CallableBase
+    template <class T>
+    class CallableNoArg : public Callable
+    {
+    public:
+      CallableNoArg(void(T::*fn)(), T* t)
+      {
+          static_assert(sizeof(Callable::functionStorage) == sizeof(void(T::*)()), "Function storage is too small to hold the pointer to member function");
+          static_assert(sizeof(Callable::instanceStorage) == sizeof(T*), "Instance storage is too small to hold the instance pointer");
+
+          memcpy(Callable::functionStorage, &fn, sizeof(void(T::*)()));
+          memcpy(Callable::instanceStorage, &t, sizeof(T*));
+      }
+
+      void operator()() const override
+      {
+          void(T::*fn)();
+          T* t;
+
+          memcpy(&fn, Callable::functionStorage, sizeof(void(T::*)()));
+          memcpy(&t, Callable::instanceStorage, sizeof(T*));
+
+          (t->*fn)();
+      }
+    };
+
+    struct NullCallable : public Callable
     {
         void operator()() const override {}
     };
-    
-    uint8_t __declspec(align(32)) storage[sizeof(CallableBase)];
+
+    alignas(alignof(Callable)) char storage[sizeof(Callable)];
 };
 
-
-template <> // special case 'void' regresses to just 'Function'
-class FunctionWithBoundArg<void>
+class Function : public FunctionWithMaxArgSize<MaxSizeForTypes<int32_t, bool, float, const char*>::value>
 {
 public:
-    FunctionWithBoundArg() {}
-    template <class T> FunctionWithBoundArg(void(T::*fn)(), T* t) : f(fn, t) {}
-    void operator()() const { f(); }
+  Function()
+    : FunctionWithMaxArgSize()
+  {}
 
-private:
-    Function f;
+  template <class T, class ArgType>
+  Function(void(T::*fn)(ArgType), T* t, ArgType a)
+    : FunctionWithMaxArgSize(fn, t, a)
+  {}
+
+  template <class T>
+  Function(void(T::*fn)(), T* t)
+    : FunctionWithMaxArgSize(fn, t)
+  {}
 };

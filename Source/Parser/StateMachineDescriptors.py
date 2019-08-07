@@ -137,7 +137,12 @@ class Action(object):
     def __init__(self, name:str, type:ActionType=ActionType.NONE, value:str=None) -> None:
         self.name = name
         self.type = type
-        self.value = value
+        self._value = value
+
+    def value(self) -> str:
+        postfix = 'f' if self.type == ActionType.FLOAT else ''
+        value = self._value or ''
+        return value + postfix
 
     def prototype_string(self) -> str:
         arg: str = ''
@@ -157,10 +162,7 @@ class Action(object):
         return 'void {}({})'.format(self.name, arg)
 
     def invocation_string(self) -> str:
-        value_postfix = 'f' if self.type == ActionType.FLOAT else ''
-        value = self.value or ''
-
-        return '{}({}{})'.format(self.name, value, value_postfix)
+        return '{}({})'.format(self.name, self.value())
 
 class InternalTransition(object):
     def __init__(self, event:str, action:Action, guard:Guard=None) -> None:
