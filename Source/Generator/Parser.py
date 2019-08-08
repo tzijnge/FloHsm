@@ -1,13 +1,13 @@
 ﻿import ply.yacc as yacc
-from StateMachineLexer import StateMachineLexer
-from StateMachineDescriptors import State, StateType, EntryExit, StateTransition, \
+from Lexer import FloHsmLexer
+from Descriptors import State, StateType, EntryExit, StateTransition, \
                                     InitialTransition, InternalTransition, \
                                     ChoiceTransition, Action, ActionType
-from StateMachineDescriptors import SimpleGuard, NotGuard, AndGuard, OrGuard
+from Descriptors import SimpleGuard, NotGuard, AndGuard, OrGuard
 import binascii
 from typing import List
 
-class StateMachineParser(object):
+class FloHsmParser(object):
     states : List[State]
     errors : List[str]
 
@@ -18,7 +18,7 @@ class StateMachineParser(object):
     )
 
     def __init__(self) -> None:
-        self.lexer = StateMachineLexer()
+        self.lexer = FloHsmLexer()
         self.tokens = self.lexer.tokens
         self.parser = yacc.yacc(module=self, debug=False)
         self.states = list()

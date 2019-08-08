@@ -1,4 +1,4 @@
-from StateMachineDescriptors import State, StateType, Guard, SimpleGuard, EntryExit, \
+from Descriptors import State, StateType, Guard, SimpleGuard, EntryExit, \
                                     InternalTransition, StateTransition, InitialTransition, \
                                     ChoiceTransition, Action
 import unittest

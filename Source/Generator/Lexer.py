@@ -3,7 +3,7 @@ from typing import List
 
 # Enter the regular expressions ar regex101.com for a detailed explanation
 
-class StateMachineLexer(object):
+class FloHsmLexer(object):
     finalTokens : List[str]
 
     def __init__(self) -> None:

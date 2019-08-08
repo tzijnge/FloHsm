@@ -42,23 +42,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="TestExhaustive\exhaustive.txt">
-      <Filter>TestExhaustive</Filter>
-    </Text>
-    <Text Include="TestChoice\choice.txt">
-      <Filter>TestChoice</Filter>
-    </Text>
-    <Text Include="TestSingleState\SingleState.txt">
-      <Filter>TestSingleState</Filter>
-    </Text>
-    <Text Include="TestCompositeState\CompositeState.txt">
-      <Filter>TestCompositeState</Filter>
-    </Text>
-    <Text Include="TestActionWithArgument\ActionWithArgument.txt">
-      <Filter>TestActionWithArgument</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="TestExhaustive\Interfaces.hpp">
       <Filter>TestExhaustive</Filter>
     </ClInclude>
@@ -82,9 +65,6 @@
     </ClInclude>
     <ClInclude Include="TestChoice\States.hpp">
       <Filter>TestChoice</Filter>
-    </ClInclude>
-    <ClInclude Include="TestSingleState\Interfaces.hpp">
-      <Filter>TestSingleState</Filter>
     </ClInclude>
     <ClInclude Include="TestSingleState\StateIds.hpp">
       <Filter>TestSingleState</Filter>
@@ -119,5 +99,25 @@
     <ClInclude Include="TestActionWithArgument\States.hpp">
       <Filter>TestActionWithArgument</Filter>
     </ClInclude>
+    <ClInclude Include="TestSingleState\Interfaces.hpp">
+      <Filter>TestSingleState</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="TestActionWithArgument\ActionWithArgument.txt">
+      <Filter>TestActionWithArgument</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TestChoice\choice.txt">
+      <Filter>TestChoice</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TestCompositeState\CompositeState.txt">
+      <Filter>TestCompositeState</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TestExhaustive\exhaustive.txt">
+      <Filter>TestExhaustive</Filter>
+    </CustomBuild>
+    <CustomBuild Include="TestSingleState\SingleState.txt">
+      <Filter>TestSingleState</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

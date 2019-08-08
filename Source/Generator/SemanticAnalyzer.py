@@ -1,4 +1,4 @@
-﻿from StateMachineDescriptors import State, StateType, Guard, Action
+﻿from Descriptors import State, StateType, Guard, Action
 from typing import Set, List, Dict, Optional
 
 class SemanticAnalyzer(object):

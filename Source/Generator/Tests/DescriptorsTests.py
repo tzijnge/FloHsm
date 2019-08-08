@@ -1,10 +1,10 @@
 ﻿import unittest
-from StateMachineDescriptors import State, StateType, InternalTransition, InitialTransition,\
+from Descriptors import State, StateType, InternalTransition, InitialTransition,\
                                     StateTransition, ChoiceTransition, Action, ActionType
-from StateMachineDescriptors import Guard, SimpleGuard, NotGuard, AndGuard, OrGuard, EntryExit
+from Descriptors import Guard, SimpleGuard, NotGuard, AndGuard, OrGuard, EntryExit
 import Helpers
 
-class Test_StateMachineDescriptorsTests(Helpers.FloHsmTester):
+class DescriptorTests(Helpers.FloHsmTester):
     def test_cannot_merge_states_with_different_names(self) -> None:
         s1 = Helpers.TestState(name='S1')
         s2 = Helpers.TestState(name='S2')

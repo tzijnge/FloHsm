@@ -1,10 +1,10 @@
 ﻿import unittest
-from StateMachineLexer import StateMachineLexer
+from Lexer import FloHsmLexer
 import ply.lex as lex
 
-class Test_StateMachineLexerTests(unittest.TestCase):
+class LexerTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.lexer = StateMachineLexer()
+        self.lexer = FloHsmLexer()
 
     def tearDown(self) -> None:
         self.assertToken(self.lexer.token(), 'NEWLINE', '\n')

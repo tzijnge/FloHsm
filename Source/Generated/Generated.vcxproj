@@ -70,7 +70,18 @@
     <Import Project="..\HsmProperties.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
@@ -85,12 +96,20 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <CustomBuild>
+      <Command>python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <LinkObjects>false</LinkObjects>
+    </CustomBuild>
+    <CustomBuild>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+      <Outputs>placeholder</Outputs>
+      <Message>Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -107,12 +126,20 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgum
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <CustomBuild>
+      <Command>python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <LinkObjects>false</LinkObjects>
+    </CustomBuild>
+    <CustomBuild>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+      <Outputs>placeholder</Outputs>
+      <Message>Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -132,12 +159,20 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgum
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <CustomBuild>
+      <Command>python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <LinkObjects>false</LinkObjects>
+    </CustomBuild>
+    <CustomBuild>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+      <Outputs>placeholder</Outputs>
+      <Message>Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -158,12 +193,20 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgum
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestCompositeState\CompositeState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestChoice\choice.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestExhaustive\exhaustive.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestSingleState\SingleState.txt
-python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgument\ActionWithArgument.txt</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
+    <CustomBuild>
+      <Command>python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+    </CustomBuild>
+    <CustomBuild>
+      <LinkObjects>false</LinkObjects>
+    </CustomBuild>
+    <CustomBuild>
+      <TreatOutputAsContent>true</TreatOutputAsContent>
+      <Outputs>placeholder</Outputs>
+      <Message>Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc" />
@@ -189,11 +232,50 @@ python $(SolutionDir)GeneratorPy\GeneratorPy.py $(ProjectDir)TestActionWithArgum
     <ClCompile Include="TestSingleState\TestSingleState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="TestActionWithArgument\ActionWithArgument.txt" />
-    <Text Include="TestChoice\choice.txt" />
-    <Text Include="TestCompositeState\CompositeState.txt" />
-    <Text Include="TestExhaustive\exhaustive.txt" />
-    <Text Include="TestSingleState\SingleState.txt" />
+    <CustomBuild Include="TestActionWithArgument\ActionWithArgument.txt">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating statemachine for %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating statemachine for %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating statemachine for %(Filename)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
+    <CustomBuild Include="TestChoice\choice.txt">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </DeploymentContent>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </ExcludedFromBuild>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </DeploymentContent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath)</Command>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating statemachine for %(Filename)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating statemachine for %(Filename)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating statemachine for %(Filename)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
+    <CustomBuild Include="TestCompositeState\CompositeState.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Generating statemachine for %(Filename)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Generating statemachine for %(Filename)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Generating statemachine for %(Filename)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Generating statemachine for %(Filename)</Message>
+    </CustomBuild>
+    <CustomBuild Include="TestExhaustive\exhaustive.txt" />
+    <CustomBuild Include="TestSingleState\SingleState.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TestActionWithArgument\Interfaces.hpp" />

@@ -1,12 +1,12 @@
 ﻿import unittest
-from StateMachineSemanticAnalyzer import SemanticAnalyzer
-from StateMachineDescriptors import State, StateType, InternalTransition, StateTransition,\
+from SemanticAnalyzer import SemanticAnalyzer
+from Descriptors import State, StateType, InternalTransition, StateTransition,\
                                     InitialTransition, ChoiceTransition, Action, ActionType
-from StateMachineDescriptors import SimpleGuard, OrGuard, AndGuard, NotGuard, EntryExit
+from Descriptors import SimpleGuard, OrGuard, AndGuard, NotGuard, EntryExit
 from typing import List, Optional
 import Helpers
 
-class Test_StateMachineSemanticAnalyzerTests(Helpers.FloHsmTester):
+class SemanticAnalyzerTests(Helpers.FloHsmTester):
     def setUp(self) -> None:
         self.analyzer= SemanticAnalyzer()
 

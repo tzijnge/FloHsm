@@ -3,9 +3,9 @@ import os.path
 import argparse
 import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'Parser'))
-from StateMachineDescriptors import State, StateType, StateTransition, InternalTransition, EntryExit, Action, ActionType
-from StateMachineParser import StateMachineParser
-from StateMachineSemanticAnalyzer import SemanticAnalyzer
+from Descriptors import State, StateType, StateTransition, InternalTransition, EntryExit, Action, ActionType
+from Parser import FloHsmParser
+from SemanticAnalyzer import SemanticAnalyzer
 from typing import List, Dict, Set, Any, Optional
 
 class StateWriter(object):
@@ -407,7 +407,7 @@ def generate_statemachine(states:List[str], events:Set[str]) -> None:
 
 def generate(input_file:str) -> None:
     with open(input_file, 'r') as f:
-        parser = StateMachineParser()
+        parser = FloHsmParser()
         parser.parse(f.read())
         if len(parser.errors) != 0:
             for e in parser.errors:

@@ -1,12 +1,11 @@
 ﻿import unittest
-from StateMachineParser import StateMachineParser
-import StateMachineGenerator
-from StateMachineDescriptors import Guard, State, StateType, Action, ActionType
+from Parser import FloHsmParser
+from Descriptors import Guard, State, StateType, Action, ActionType
 import Helpers
 
-class Test_StateMachineParserTests(Helpers.FloHsmTester):
+class ParserTests(Helpers.FloHsmTester):
     def setUp(self) -> None:
-        self.parser = StateMachineParser()
+        self.parser = FloHsmParser()
                 
     def parse(self, state_description:str) -> None:
         self.parser.parse(state_description)
@@ -14,17 +13,6 @@ class Test_StateMachineParserTests(Helpers.FloHsmTester):
     def assertParseResult(self, num_states:int=0, num_errors:int=0) -> None:
         self.assertEqual(num_states, len(self.parser.states))
         self.assertEqual(num_errors, len(self.parser.errors))
-
-    def test_generated(self) -> None:
-        import random
-
-        random.seed(3)
-
-        gen = StateMachineGenerator.Generator()
-        description = gen.generate()
-                
-        self.parse(description)
-        self.assertEqual(0, len(self.parser.errors))
 
     def test_parser_initial_state(self) -> None:
         self.assertParseResult()
