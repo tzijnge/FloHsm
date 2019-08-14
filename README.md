@@ -16,7 +16,7 @@ S1 --> S2 : E1
 ```
 Transition triggerd by event E1, but only if boolean guard expression G1 evaluates to true
 ```
-S1 --> S2 : E1 \[G1\]
+S1 --> S2 : E1 [G1]
 ```
 Transition with action A1, with and without guard
 ```
