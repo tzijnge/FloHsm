@@ -38,5 +38,8 @@ For now, FloHsm does not parse the @startuml and @enduml keywords that are requi
 @enduml
 ```
 
+## Examples
+There are a couple of tests that demonstrate most of the FloHsm capabilities. Please find them in ```Source/Generated/Test*```. There is a .puml file for viewing in PlantUml and a .txt file that is used for FloHsm. Generate the state machine files and run the tests. This is as easy as building the project in Visual Studio 2017 and running the test executable. The tests should be easy to compile on other platforms and compilers, but development and testing was only done on Windows with Visual Studio
+
 ## Future
 More documentation and implementation coming soon. See the issues page for identified open issues
