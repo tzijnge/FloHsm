@@ -1,5 +1,5 @@
-#include "gtest\gtest.h"
-#include "Hsm\Alignment.hpp"
+#include "gtest/gtest.h"
+#include "Hsm/Alignment.hpp"
 
 
 class AlignmentTest : public testing::Test
