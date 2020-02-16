@@ -7,6 +7,8 @@ from Descriptors import State, StateType, StateTransition, InternalTransition, E
 from Parser import FloHsmParser
 from SemanticAnalyzer import SemanticAnalyzer
 from typing import List, Dict, Set, Any, Optional
+import pathlib
+from mako.template import Template
 
 class StateWriter(object):
     lines: List[str]
@@ -190,102 +192,56 @@ class StateWriter(object):
 
 destination_folder:str
 
-def generate_event_interface_class(name:str, methods:Set[str]) -> List[str]:
-    lines = ['class {}'.format(name),
-             '{',
-             'public:',
-             '    virtual ~{}() {}'.format(name, '{}')]
-    lines.extend(['    virtual void {}() {{}}'.format(m) for m in methods])
-    lines.append('};')
-    return lines
+def generate_file(file_name, context):
+    generate_dir = pathlib.Path(__file__).parent.absolute()
+    template_file = os.path.join(generate_dir, 'templates', file_name + '.template')
+    template = Template(filename = template_file)
 
-def generate_action_interface_class(name:str, action_prototypes:Set[str]) -> List[str]:
-    lines = ['class {}'.format(name),
-             '{',
-             'public:',
-             '    virtual ~{}() {}'.format(name, '{}')]
-    lines.extend(['    virtual {} = 0;'.format(ap) for ap in action_prototypes])
-    lines.append('};')
-    return lines
-
-def generate_guard_interface_class(name:str, methods:Set[str]) -> List[str]:
-    lines = ['class {}'.format(name),
-             '{',
-             'public:',
-             '    virtual ~{}() {}'.format(name, '{}')]
-    lines.extend(['    virtual bool {}() const = 0;'.format(m) for m in methods])
-    lines.append('};')
-    return lines
+    with open(os.path.join(destination_folder, file_name), "w") as f:
+        f.write(template.render(**context))
 
 def generate_interfaces(guard_names:Set[str], action_prototypes:Set[str], event_names:Set[str]) -> None:
-    file_name = 'Interfaces.hpp'
+    context = \
+      {\
+       'guard_names' : guard_names,\
+       'action_prototypes' : action_prototypes,\
+       'event_names' : event_names,\
+      }
 
-    with open(os.path.join(destination_folder, file_name), "w") as f:
-        lines = ['#pragma once']
-        lines.append('')
-        lines.append('namespace')
-        lines.append('{')
-        lines.extend(generate_guard_interface_class('IGuards', guard_names))
-        lines.append('')
-        lines.extend(generate_action_interface_class('IActions', action_prototypes))
-        lines.append('')
-        lines.extend(generate_event_interface_class('IEvents', event_names))
-        lines.append('')
-        lines.append('}')
-
-        f.write('\n'.join(lines))
+    generate_file('Interfaces.hpp', context)
 
 def generate_state_ids(states:List[State]) -> None:
-    file_name = 'StateIds.hpp'
+    composite_state_index = 0
+    leaf_state_index: Dict[str, int] = dict()
+    state_ids: Dict[str, str] = dict()
 
-    with open(os.path.join(destination_folder, file_name), "w") as f:
-        lines = ['#pragma once',
-                 '#include "Hsm/StateId.hpp"',
-                 '#include <string>',
-                 '#include <map>',
-                 '',
-                 'namespace',
-                 '{',
-                 'const uint32_t CompositeStatesRegion = 10;',
-                 '']
+    for s in states:
+        if s.is_composite and s.parent is None:
+            state_ids[s.name] = '1 << (CompositeStatesRegion + {})'.format(composite_state_index)
+            composite_state_index += 1
+        elif s.is_composite and s.parent is not None:
+            state_ids[s.name] = 'StateId_{} | 1 << (CompositeStatesRegion + {})'.format(s.parent, composite_state_index)
+            composite_state_index += 1
+        elif not s.is_composite and s.parent is None:
+            if 'TopLevel' not in leaf_state_index:
+                leaf_state_index.update({'TopLevel':1})
+            state_ids[s.name] = '{}'.format(leaf_state_index['TopLevel'])
+            leaf_state_index['TopLevel'] += 1
+        else:
+            parent = s.parent
+            if parent is not None:
+                if parent not in leaf_state_index:
+                    leaf_state_index.update({parent:1})
+                state_ids[s.name] = 'StateId_{} | {}'.format(parent, leaf_state_index[parent])
+                leaf_state_index[parent] += 1
 
-        composite_state_index = 0
-        leaf_state_index: Dict[str, int] = dict()
+    context = \
+      {\
+        'states' : states,\
+        'state_ids' : state_ids,\
+      }
 
-        for s in states:
-            if s.is_composite and s.parent is None:
-                lines.append('const StateId StateId_{} = 1 << (CompositeStatesRegion + {});'.format(s.name, composite_state_index))
-                composite_state_index += 1
-            elif s.is_composite and s.parent is not None:
-                lines.append('const StateId StateId_{} = StateId_{} | 1 << (CompositeStatesRegion + {});'.format(s.name, s.parent, composite_state_index))
-                composite_state_index += 1
-            elif not s.is_composite and s.parent is None:
-                if 'TopLevel' not in leaf_state_index:
-                    leaf_state_index.update({'TopLevel':1})
-                lines.append('const StateId StateId_{} = {};'.format(s.name, leaf_state_index['TopLevel']))
-                leaf_state_index['TopLevel'] += 1
-            else:
-                parent = s.parent
-                if parent is not None:
-                    if parent not in leaf_state_index:
-                        leaf_state_index.update({parent:1})
-                    lines.append('const StateId StateId_{} = StateId_{} | {};'.format(s.name, parent, leaf_state_index[parent]))
-                    leaf_state_index[parent] += 1
-
-
-        lines.append('')
-        lines.append('const std::map<StateId, std::string> StateNames = ')
-        lines.append('{')
-
-        state_names = list()
-        for s in states:
-            state_names.append('    {{ StateId_{}, "{}" }}'.format(s.name, s.name))
-
-        lines.append(',\n'.join(state_names))
-        lines.append('};')
-        lines.append('}')
-
-        f.write('\n'.join(lines))
+    generate_file('StateIds.hpp', context)
 
 def generate_states(states:List[State]) -> None:
     file_name = 'States.hpp'
@@ -324,86 +280,14 @@ def generate_states(states:List[State]) -> None:
 
         f.write('\n'.join(lines))
 
-def generate_statemachine_private(states:List[str]) -> List[str]:
-    lines = ['private:',
-             '    StateBase* ChangeStateInternal(StateId fromState, StateId toState) override',
-             '    {',
-             '        const StateId previousStateId = fromState;',
-             '',
-             '        switch (toState)',
-             '        {']
-
-    for s in states:
-        s_lines = ['        case StateId_{}:'.format(s),
-                   '            currentState = new (stateStorage){}(previousStateId, toState, this, this);'.format(s),
-                   '            break;']
-        lines.extend(s_lines)
-
-    lines.extend(['        default:',
-                  '            break;'
-                  '        }',
-                  '',
-                  '        return currentState;',
-                  '    }',
-                  '',
-                  '    uint8_t stateStorage[1000];'])
-
-    return lines
-
-def generate_statemachine_protected() -> List[str]:
-    lines = ['protected:',
-             '    StateBase* currentState;',
-             '']
-
-    return lines
-
-def generate_statemachine_public(events:Set[str]) -> List[str]:
-    lines = ['public:',
-             '    StateMachine()',
-             '        : currentState(nullptr)',
-             '    {}',
-             '',
-             '    void InitStateMachine()',
-             '    {',
-             '        ChangeState(StateId_Invalid, StateId_FloHsmInitial_5OdpEA31BEcPrWrNx8u7);',
-             '        ChangeStateIfNecessary();',
-             '    }',
-             '',
-             '    StateId CurrentState() const override { return currentState->GetId(); }',
-             '']
-
-    for e in events:
-        e_lines = ['    void {}() override'.format(e),
-                   '    {',
-                   '        currentState->{}();'.format(e),
-                   '        ChangeStateIfNecessary();',
-                   '    }',
-                   '']
-        lines.extend(e_lines)\
-
-    return lines
-
 def generate_statemachine(states:List[str], events:Set[str]) -> None:
-    file_name = 'StateMachine.hpp'
+    context = \
+      {\
+        'states' : states,\
+        'events' : events,\
+      }
 
-    with open(os.path.join(destination_folder, file_name), "w") as f:
-        lines = ['#pragma once',
-                 '#include "Interfaces.hpp"',
-                 '#include "StateIds.hpp"',
-                 '#include "States.hpp"',
-                 '#include "Hsm/StateMachineBase.hpp"',
-                 '',
-                 'namespace',
-                 '{',
-                 'class StateMachine: public hsm::StateMachineBase, public IEvents, private IActions, public IGuards',
-                 '{']
-        lines.extend(generate_statemachine_public(events))
-        lines.extend(generate_statemachine_protected())
-        lines.extend(generate_statemachine_private(states))
-        lines.append('};')
-        lines.append('}')
-
-        f.write('\n'.join(lines))
+    generate_file('StateMachine.hpp', context)
 
 def generate(input_file:str) -> None:
     with open(input_file, 'r') as f:
