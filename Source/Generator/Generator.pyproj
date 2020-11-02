@@ -6,8 +6,7 @@
     <ProjectGuid>5e2efdee-73d7-4353-9777-3995991bbe48</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>
-    </StartupFile>
+    <StartupFile>FloHsm.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -15,8 +14,7 @@
     <Name>Generator</Name>
     <RootNamespace>FloHsm</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>
-    </CommandLineArguments>
+    <CommandLineArguments>../Generated/C/TestUart/SmUart.puml --language c</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <InterpreterArguments>
     </InterpreterArguments>
@@ -41,6 +39,9 @@
     <Compile Include="Descriptors.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="languages\cpp\generator_cpp.py" />
+    <Compile Include="languages\c\generator_c.py" />
+    <Compile Include="languages\c\__init__.py" />
     <Compile Include="Lexer.py" />
     <Compile Include="Parser.py">
       <SubType>Code</SubType>
@@ -48,16 +49,25 @@
     <Compile Include="SemanticAnalyzer.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestMako.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tests\DescriptorsTests.py" />
     <Compile Include="Tests\LexerTests.py" />
     <Compile Include="Tests\Main.py" />
     <Compile Include="Tests\ParserTests.py" />
     <Compile Include="Tests\SemanticAnalyzerTests.py" />
+    <Compile Include="TestYaml.py">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="mypy.ini" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="languages\" />
+    <Folder Include="languages\cpp" />
+    <Folder Include="languages\c\" />
     <Folder Include="Tests\" />
   </ItemGroup>
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -19,6 +19,7 @@ class SemanticAnalyzer(object):
         self.event_names = set()
         self.guard_names = set()
         self.action_prototypes = set()
+        self.action_names = set()
         self.state_for_name = dict()
 
     def remove_reachable_states(self, reachable_root:State, possibly_unreachable_states:List[str]) -> None:
@@ -272,6 +273,7 @@ class SemanticAnalyzer(object):
             self.action_prototypes.add(a.prototype_string())
 
         action_names = [action.name for action in actions]
+        self.action_names = set(action_names)
 
         for s in self.state_names:
             if s in self.event_names:

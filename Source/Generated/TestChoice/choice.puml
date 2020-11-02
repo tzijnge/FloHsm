@@ -1,3 +1,28 @@
 @startuml
-!include choice.txt
+state choice1 <<choice>>
+state s1{
+  state s2
+  state choice2 <<choice>>
+}
+state s3{
+  state s4
+}
+
+s1 : <<entry>> / A1
+s1 : <<exit>> / A2
+
+s2 : <<entry>> / A3
+s2 : <<exit>> / A4
+
+s3 : <<entry>> / A5
+
+[*] --> choice1
+choice1 --> s1 : <<choice>> [G1 & G2] / A6
+choice1 --> s2 : <<choice>> [(G1 & !G2) | (!G1 & G2)] / A7
+choice1 --> s3 : <<choice>> [!G1 & !G2] / A8
+
+s2 --> choice2 : e1
+choice2 --> s1 : <<choice>> [G3] / A9
+choice2 --> s4 : <<choice>> [!G3] / A10
+
 @enduml

@@ -1,3 +1,4 @@
+@startuml
 state S2{
   state S3
   state S4{
@@ -32,3 +33,4 @@ S5 --> S3 : E3 [!G3]
 S6 : <<entry>> [G2] / A14
 S6 : <<exit>> [G1] / A15
 S6 --> S4 : E1 / A16
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+[*] --> IDLE
+
+IDLE: configure/saveConfig
+IDLE: start[!configOk]/setError
+IDLE --> RUNNING: start[configOk]/configureHw
+
+RUNNING --> SUSPENDING: suspend/stopHw
+RUNNING --> STOPPING: stop/stopHw
+
+SUSPENDING --> SUSPENDED: stopped
+STOPPING --> IDLE: stopped
+
+SUSPENDED --> RUNNING: resume/startHw
+SUSPENDED --> IDLE: stop
+@enduml

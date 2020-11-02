@@ -20,6 +20,18 @@
     <ClCompile Include="TestActionWithArgument\TestActionWithArgument.cpp">
       <Filter>TestActionWithArgument</Filter>
     </ClCompile>
+    <ClCompile Include="C\TestExhaustive\TestExhaustiveC.cpp">
+      <Filter>C\TestExhaustive</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestExhaustive\SmExhaustive.c">
+      <Filter>C\TestExhaustive</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestUart\TestUartC.cpp">
+      <Filter>C\TestUart</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestUart\Smuart.c">
+      <Filter>C\TestUart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Gtest">
@@ -39,6 +51,15 @@
     </Filter>
     <Filter Include="TestActionWithArgument">
       <UniqueIdentifier>{760dbbc8-4c21-44fa-819a-05419856ad54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C">
+      <UniqueIdentifier>{9da9f82b-f742-4530-a9ef-1417ae9190e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C\TestExhaustive">
+      <UniqueIdentifier>{319c9c0b-ffd5-402b-b489-0ac91a17e50d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C\TestUart">
+      <UniqueIdentifier>{d421e57d-aefc-4d29-91d8-58a932314aec}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,22 +123,34 @@
     <ClInclude Include="TestSingleState\Interfaces.hpp">
       <Filter>TestSingleState</Filter>
     </ClInclude>
+    <ClInclude Include="C\TestExhaustive\SmExhaustive.h">
+      <Filter>C\TestExhaustive</Filter>
+    </ClInclude>
+    <ClInclude Include="C\TestUart\Smuart.h">
+      <Filter>C\TestUart</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="TestActionWithArgument\ActionWithArgument.txt">
+    <CustomBuild Include="TestActionWithArgument\ActionWithArgument.puml">
       <Filter>TestActionWithArgument</Filter>
     </CustomBuild>
-    <CustomBuild Include="TestChoice\choice.txt">
+    <CustomBuild Include="TestChoice\choice.puml">
       <Filter>TestChoice</Filter>
     </CustomBuild>
-    <CustomBuild Include="TestCompositeState\CompositeState.txt">
+    <CustomBuild Include="TestCompositeState\CompositeState.puml">
       <Filter>TestCompositeState</Filter>
     </CustomBuild>
-    <CustomBuild Include="TestExhaustive\exhaustive.txt">
+    <CustomBuild Include="TestExhaustive\exhaustive.puml">
       <Filter>TestExhaustive</Filter>
     </CustomBuild>
-    <CustomBuild Include="TestSingleState\SingleState.txt">
+    <CustomBuild Include="TestSingleState\SingleState.puml">
       <Filter>TestSingleState</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C\TestExhaustive\SmExhaustive.puml">
+      <Filter>C\TestExhaustive</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C\TestUart\SmUart.puml">
+      <Filter>C\TestUart</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

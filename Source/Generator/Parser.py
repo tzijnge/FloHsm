@@ -25,7 +25,12 @@ class FloHsmParser(object):
         self.errors = list()
 
     def parse(self, data:str) -> None:
-        self.parser.parse(data, lexer=self.lexer)
+        self.parser.parse(self.strip_puml_headers(data), lexer=self.lexer)
+
+    def strip_puml_headers(self, data:str) -> str:
+        start = data.rfind('@startuml') + len('@startuml')
+        end = data.find('@enduml')
+        return data[start : end :]
 
     def p_top_level_states(self, p:yacc.Production) -> None:
         '''top_level_states : state_list
