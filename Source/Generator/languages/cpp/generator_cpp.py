@@ -188,7 +188,7 @@ destination_folder:str
 
 def generate_file(file_name, context):
     generate_dir = pathlib.Path(__file__).parent.absolute()
-    template_file = path.join(generate_dir, file_name + '.template')
+    template_file = path.join(generate_dir, file_name + '.mako')
     template = Template(filename = template_file)
 
     with open(path.join(destination_folder, file_name), "w") as f:

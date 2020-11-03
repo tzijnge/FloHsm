@@ -1,8 +1,10 @@
+// This file was generated with FloHsm. Do not edit.
+
 #include "${desc['file_name']}.h"
 #include <assert.h>
 
-static void NullAction(void) {}
-static bool NullGuard(void) { return false; }
+static void NullAction(void* a) { (void)a; }
+static bool NullGuard(void* g) { (void)g; return false; }
 
 const char* ${desc['prefix']}CurrentStateName(const ${desc['prefix']}Instance* instance)
 {
@@ -17,7 +19,7 @@ const char* ${desc['prefix']}CurrentStateName(const ${desc['prefix']}Instance* i
     }
 }
 
-void ${desc['prefix']}InitInstance(${desc['prefix']}Instance* instance)
+void ${desc['prefix']}InitInstance(${desc['prefix']}Instance* instance, void* context)
 {
     for (int i = 0; i < ${len(desc['action_names'])}; ++i)
     {
@@ -27,6 +29,8 @@ void ${desc['prefix']}InitInstance(${desc['prefix']}Instance* instance)
     {
         instance->guards[i] = &NullGuard;
     }
+    
+    instance->context = context;
 }
 
 void ${desc['prefix']}InitAction(${desc['prefix']}Instance* instance, ${desc['prefix']}ActionId actionId, ${desc['prefix']}Action action)
@@ -51,7 +55,7 @@ void ${desc['prefix']}InitStateMachine(${desc['prefix']}Instance* instance)
     }
     
     % if desc['initial_action'] is not None:
-    instance->actions[${desc['prefix']}Action_${desc['initial_action']}]();
+    instance->actions[${desc['prefix']}Action_${desc['initial_action']}](instance->context);
     % endif
     instance->state = ${desc['prefix']}State_${desc['initial_state']};
 }
@@ -64,20 +68,20 @@ void ${desc['prefix']}_${e}(${desc['prefix']}Instance* instance)
     {
         % if 'action' in tr:
         % if tr['action'] is not None:
-        instance->actions[${desc['prefix']}Action_${tr['action']}]();
+        instance->actions[${desc['prefix']}Action_${tr['action']}](instance->context);
         % endif
         % if tr['to'] is not None:
         instance->state = ${desc['prefix']}State_${tr['to']};
         % endif
         % elif 'conditions' in tr:
         % for c in tr['conditions']:
-        const bool ${c} = instance->guards[${desc['prefix']}Guard_${c}]();
+        const bool ${c} = instance->guards[${desc['prefix']}Guard_${c}](instance->context);
         % endfor
         % for g in tr['guards']:
         ${'' if loop.first else 'else '}if (${g})
         {
             % if tr['transition'][g]['action'] is not None:
-            instance->actions[${desc['prefix']}Action_${tr['transition'][g]['action']}]();
+            instance->actions[${desc['prefix']}Action_${tr['transition'][g]['action']}](instance->context);
             % endif
             % if tr['transition'][g]['to'] is not None:
             instance->state = ${desc['prefix']}State_${tr['transition'][g]['to']};

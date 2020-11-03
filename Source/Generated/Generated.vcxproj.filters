@@ -23,14 +23,14 @@
     <ClCompile Include="C\TestExhaustive\TestExhaustiveC.cpp">
       <Filter>C\TestExhaustive</Filter>
     </ClCompile>
-    <ClCompile Include="C\TestExhaustive\SmExhaustive.c">
-      <Filter>C\TestExhaustive</Filter>
-    </ClCompile>
     <ClCompile Include="C\TestUart\TestUartC.cpp">
       <Filter>C\TestUart</Filter>
     </ClCompile>
     <ClCompile Include="C\TestUart\Smuart.c">
       <Filter>C\TestUart</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestExhaustive\exhaustive.c">
+      <Filter>C\TestExhaustive</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,11 +123,11 @@
     <ClInclude Include="TestSingleState\Interfaces.hpp">
       <Filter>TestSingleState</Filter>
     </ClInclude>
-    <ClInclude Include="C\TestExhaustive\SmExhaustive.h">
-      <Filter>C\TestExhaustive</Filter>
-    </ClInclude>
     <ClInclude Include="C\TestUart\Smuart.h">
       <Filter>C\TestUart</Filter>
+    </ClInclude>
+    <ClInclude Include="C\TestExhaustive\exhaustive.h">
+      <Filter>C\TestExhaustive</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -146,11 +146,11 @@
     <CustomBuild Include="TestSingleState\SingleState.puml">
       <Filter>TestSingleState</Filter>
     </CustomBuild>
-    <CustomBuild Include="C\TestExhaustive\SmExhaustive.puml">
-      <Filter>C\TestExhaustive</Filter>
-    </CustomBuild>
     <CustomBuild Include="C\TestUart\SmUart.puml">
       <Filter>C\TestUart</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C\TestExhaustive\exhaustive.puml">
+      <Filter>C\TestExhaustive</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

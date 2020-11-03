@@ -1,3 +1,5 @@
+// This file was generated with FloHsm. Do not edit.
+
 #ifndef ${desc['file_name'].upper()}_H
 #define ${desc['file_name'].upper()}_H
 
@@ -9,8 +11,8 @@
 extern "C" {
 #endif
 
-typedef void (*${desc['prefix']}Action)(void);
-typedef bool (*${desc['prefix']}Guard)(void);
+typedef void (*${desc['prefix']}Action)(void*);
+typedef bool (*${desc['prefix']}Guard)(void*);
 
 typedef enum
 {
@@ -38,11 +40,12 @@ typedef struct
     ${desc['prefix']}StateId state;
     ${desc['prefix']}Action actions[5];
     ${desc['prefix']}Guard guards[1];
+    void* context;
 } ${desc['prefix']}Instance;
 
 const char* ${desc['prefix']}CurrentStateName(const ${desc['prefix']}Instance* instance);
 
-void ${desc['prefix']}InitInstance(${desc['prefix']}Instance* instance);
+void ${desc['prefix']}InitInstance(${desc['prefix']}Instance* instance, void* context);
 void ${desc['prefix']}InitAction(${desc['prefix']}Instance* instance, ${desc['prefix']}ActionId actionId, ${desc['prefix']}Action action);
 void ${desc['prefix']}InitGuard(${desc['prefix']}Instance* instance, ${desc['prefix']}GuardId guardId, ${desc['prefix']}Guard guard);
 void ${desc['prefix']}InitStateMachine(${desc['prefix']}Instance* instance);

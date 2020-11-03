@@ -9,9 +9,7 @@ namespace C
   public:
     TestUart()
     {
-      instance = this;
-
-      SmUartInitInstance(&smUart);
+      SmUartInitInstance(&smUart, this);
       SmUartInitAction(&smUart, SmUartAction_configureHw, &configureHw);
       SmUartInitAction(&smUart, SmUartAction_saveConfig, &saveConfig);
       SmUartInitAction(&smUart, SmUartAction_setError, &setError);
@@ -35,14 +33,13 @@ namespace C
     SmUartInstance smUart;
 
   private:
-    static TestUart* instance;
 
-    static void configureHw() { instance->AddToLog("configureHw"); }
-    static void saveConfig() { instance->AddToLog("saveConfig"); }
-    static void setError() { instance->AddToLog("setError"); }
-    static void stopHw() { instance->AddToLog("stopHw"); }
-    static void startHw() { instance->AddToLog("startHw"); }
-    static bool ConfigOk() { return instance->configOk; }
+    static void configureHw(void* context) { static_cast<TestUart*>(context)->AddToLog("configureHw"); }
+    static void saveConfig(void* context) { static_cast<TestUart*>(context)->AddToLog("saveConfig"); }
+    static void setError(void* context) { static_cast<TestUart*>(context)->AddToLog("setError"); }
+    static void stopHw(void* context) { static_cast<TestUart*>(context)->AddToLog("stopHw"); }
+    static void startHw(void* context) { static_cast<TestUart*>(context)->AddToLog("startHw"); }
+    static bool ConfigOk(void* context) { return static_cast<TestUart*>(context)->configOk; }
 
     void AddToLog(const std::string& l)
     {
@@ -52,8 +49,6 @@ namespace C
 
     std::string log;
   };
-
-  TestUart* TestUart::instance {nullptr};
 
   TEST_F(TestUart, InitialState)
   {

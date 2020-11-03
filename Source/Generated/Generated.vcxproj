@@ -210,7 +210,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc" />
-    <ClCompile Include="C\TestExhaustive\SmExhaustive.c" />
+    <ClCompile Include="C\TestExhaustive\exhaustive.c" />
     <ClCompile Include="C\TestExhaustive\TestExhaustiveC.cpp" />
     <ClCompile Include="C\TestUart\SmUart.c" />
     <ClCompile Include="C\TestUart\TestUartC.cpp" />
@@ -282,7 +282,7 @@
     <CustomBuild Include="TestSingleState\SingleState.puml" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="C\TestExhaustive\SmExhaustive.h" />
+    <ClInclude Include="C\TestExhaustive\exhaustive.h" />
     <ClInclude Include="C\TestUart\SmUart.h" />
     <ClInclude Include="TestActionWithArgument\Interfaces.hpp" />
     <ClInclude Include="TestActionWithArgument\StateIds.hpp" />
@@ -306,7 +306,7 @@
     <ClInclude Include="TestSingleState\States.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C\TestExhaustive\SmExhaustive.puml">
+    <CustomBuild Include="C\TestUart\SmUart.puml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -318,15 +318,10 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C\TestUart\SmUart.puml">
+    <CustomBuild Include="C\TestExhaustive\exhaustive.puml">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
