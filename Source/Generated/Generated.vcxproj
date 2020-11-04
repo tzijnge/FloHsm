@@ -210,6 +210,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\Gtest\googletest\src\gtest-all.cc" />
+    <ClCompile Include="C\TestChoice\choice.c" />
+    <ClCompile Include="C\TestChoice\TestChoiceC.cpp" />
     <ClCompile Include="C\TestExhaustive\exhaustive.c" />
     <ClCompile Include="C\TestExhaustive\TestExhaustiveC.cpp" />
     <ClCompile Include="C\TestUart\SmUart.c" />
@@ -282,6 +284,7 @@
     <CustomBuild Include="TestSingleState\SingleState.puml" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="C\TestChoice\choice.h" />
     <ClInclude Include="C\TestExhaustive\exhaustive.h" />
     <ClInclude Include="C\TestUart\SmUart.h" />
     <ClInclude Include="TestActionWithArgument\Interfaces.hpp" />
@@ -322,6 +325,15 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <FileType>Document</FileType>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C\TestChoice\choice.puml">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">python $(SolutionDir)Generator\FloHsm.py %(FullPath) --language c</Command>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

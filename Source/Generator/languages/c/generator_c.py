@@ -6,7 +6,7 @@ statemachine_name = ''
 
 def generate_source(states, guard_names, action_names, event_names, global_entry):
     template = path.join(path.dirname(path.realpath(__file__)), 'source.mako')
-    prefix = statemachine_name
+    prefix = statemachine_name[:1].upper() + statemachine_name[1:]
     file_name = statemachine_name
     dest = path.join(destination_folder, file_name + '.c')
         
@@ -65,6 +65,32 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
                     transitions_for_event[event][state.name]['transition'][it.guard.to_string()]['action'] = it.action.name
                     transitions_for_event[event][state.name]['transition'][it.guard.to_string()]['to'] = None
 
+    for state in states:
+      if len(state.choice_transitions) != 0:
+        if 'AutoTransition' not in transitions_for_event:
+          transitions_for_event['AutoTransition'] = dict()
+
+        transitions_for_event['AutoTransition'][state.name] = dict()
+        for ct in state.choice_transitions:
+
+          if 'conditions' not in transitions_for_event['AutoTransition'][state.name]:
+              transitions_for_event['AutoTransition'][state.name]['conditions'] = ct.guard.guard_conditions()
+          else:
+              transitions_for_event['AutoTransition'][state.name]['conditions'].union(ct.guard.guard_conditions())
+                    
+          if 'guards' not in transitions_for_event['AutoTransition'][state.name]:
+              transitions_for_event['AutoTransition'][state.name]['guards'] = set()
+              transitions_for_event['AutoTransition'][state.name]['transition'] = dict()
+
+          transitions_for_event['AutoTransition'][state.name]['guards'].add(ct.guard.to_string())
+
+          if ct.guard.to_string() not in transitions_for_event['AutoTransition'][state.name]['transition']:
+              transitions_for_event['AutoTransition'][state.name]['transition'][ct.guard.to_string()] = dict()
+
+          transitions_for_event['AutoTransition'][state.name]['transition'][ct.guard.to_string()]['action'] = ct.action.name if ct.action else None
+          transitions_for_event['AutoTransition'][state.name]['transition'][ct.guard.to_string()]['to'] = ct.toState
+
+
     if global_entry.initial_transition.action is not None:
       initial_action = global_entry.initial_transition.action.name
     else:
@@ -73,7 +99,9 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
     desc = dict()
     desc['guard_names'] = guard_names
     desc['action_names'] = action_names
-    desc['event_names'] = event_names
+    desc['event_names'] = event_names.copy()
+    if 'AutoTransition' in transitions_for_event:
+        desc['event_names'].add('AutoTransition')
     desc['state_names'] = [s.name for s in states]
     desc['prefix'] = prefix
     desc['file_name'] = file_name
@@ -87,7 +115,7 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
 
 def generate_header(states, guard_names, action_names, event_names):
     template = path.join(path.dirname(path.realpath(__file__)), 'header.mako')
-    prefix = statemachine_name
+    prefix = statemachine_name[:1].upper() + statemachine_name[1:]
     file_name = statemachine_name
     dest = path.join(destination_folder, file_name + '.h')
     

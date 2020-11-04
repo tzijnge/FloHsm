@@ -32,6 +32,12 @@
     <ClCompile Include="C\TestExhaustive\exhaustive.c">
       <Filter>C\TestExhaustive</Filter>
     </ClCompile>
+    <ClCompile Include="C\TestChoice\TestChoiceC.cpp">
+      <Filter>C\TestChoice</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestChoice\choice.c">
+      <Filter>C\TestChoice</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Gtest">
@@ -60,6 +66,9 @@
     </Filter>
     <Filter Include="C\TestUart">
       <UniqueIdentifier>{d421e57d-aefc-4d29-91d8-58a932314aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="C\TestChoice">
+      <UniqueIdentifier>{7cbb0d90-fd1d-49de-8254-c0a4450d7e82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -129,6 +138,9 @@
     <ClInclude Include="C\TestExhaustive\exhaustive.h">
       <Filter>C\TestExhaustive</Filter>
     </ClInclude>
+    <ClInclude Include="C\TestChoice\choice.h">
+      <Filter>C\TestChoice</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="TestActionWithArgument\ActionWithArgument.puml">
@@ -151,6 +163,9 @@
     </CustomBuild>
     <CustomBuild Include="C\TestExhaustive\exhaustive.puml">
       <Filter>C\TestExhaustive</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C\TestChoice\choice.puml">
+      <Filter>C\TestChoice</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

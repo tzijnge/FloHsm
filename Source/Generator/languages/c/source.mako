@@ -6,6 +6,10 @@
 static void NullAction(void* a) { (void)a; }
 static bool NullGuard(void* g) { (void)g; return false; }
 
+% if 'AutoTransition' in desc['transitions']:
+static void ${desc['prefix']}_AutoTransition(${desc['prefix']}Instance* instance);
+% endif
+
 const char* ${desc['prefix']}CurrentStateName(const ${desc['prefix']}Instance* instance)
 {
     switch (instance->state)
@@ -72,6 +76,9 @@ void ${desc['prefix']}_${e}(${desc['prefix']}Instance* instance)
         % endif
         % if tr['to'] is not None:
         instance->state = ${desc['prefix']}State_${tr['to']};
+        % if 'AutoTransition' in desc['transitions']:
+        ${desc['prefix']}_AutoTransition(instance);
+        % endif
         % endif
         % elif 'conditions' in tr:
         % for c in tr['conditions']:
@@ -85,6 +92,9 @@ void ${desc['prefix']}_${e}(${desc['prefix']}Instance* instance)
             % endif
             % if tr['transition'][g]['to'] is not None:
             instance->state = ${desc['prefix']}State_${tr['transition'][g]['to']};
+            % if 'AutoTransition' in desc['transitions']:
+            ${desc['prefix']}_AutoTransition(instance);
+            %endif
             % endif
         }
         % endfor

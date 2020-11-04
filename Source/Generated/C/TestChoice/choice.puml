@@ -1,0 +1,8 @@
+@startuml
+state C1 <<choice>>
+
+[*] --> S1
+S1 --> C1: e1 / a1
+C1 --> S2: <<choice>> [g1]/a2
+C1 --> S3: <<choice>> [!g1]/a3
+@enduml

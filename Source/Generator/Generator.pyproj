@@ -14,7 +14,7 @@
     <Name>Generator</Name>
     <RootNamespace>FloHsm</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>../Generated/C/TestUart/SmUart.puml --language c</CommandLineArguments>
+    <CommandLineArguments>../Generated/C/TestChoice/choice.puml --language c</CommandLineArguments>
     <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
     <InterpreterArguments>
     </InterpreterArguments>
