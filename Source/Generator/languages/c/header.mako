@@ -38,8 +38,8 @@ typedef enum
 typedef struct
 {
     ${desc['prefix']}StateId state;
-    ${desc['prefix']}Action actions[5];
-    ${desc['prefix']}Guard guards[1];
+    ${desc['prefix']}Action actions[${len(desc['action_names'])}];
+    ${desc['prefix']}Guard guards[${len(desc['guard_names'])}];
     void* context;
 } ${desc['prefix']}Instance;
 
