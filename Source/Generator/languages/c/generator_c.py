@@ -7,6 +7,8 @@ statemachine_name = ''
 def generate_source(states, guard_names, action_names, event_names, global_entry):
     template = path.join(path.dirname(path.realpath(__file__)), 'source.mako')
     prefix = statemachine_name[:1].upper() + statemachine_name[1:]
+    for c in list("`~!@#$%^&()-+=[]{};'.,"):
+      prefix = prefix.replace(c, '_')
     file_name = statemachine_name
     dest = path.join(destination_folder, file_name + '.c')
         
@@ -70,7 +72,9 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
         if 'AutoTransition' not in transitions_for_event:
           transitions_for_event['AutoTransition'] = dict()
 
-        transitions_for_event['AutoTransition'][state.name] = dict()
+        if state.name not in transitions_for_event:
+          transitions_for_event['AutoTransition'][state.name] = dict()
+
         for ct in state.choice_transitions:
 
           if 'conditions' not in transitions_for_event['AutoTransition'][state.name]:
@@ -91,6 +95,46 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
           transitions_for_event['AutoTransition'][state.name]['transition'][ct.guard.to_string()]['to'] = ct.toState
 
 
+      if state.entry is not None:
+        entry = state.entry
+        if 'AutoTransition' not in transitions_for_event:
+          transitions_for_event['AutoTransition'] = dict()
+
+        if state.name not in transitions_for_event:
+          transitions_for_event['AutoTransition'][state.name] = dict()
+
+        if entry.guard is None:
+            transitions_for_event['AutoTransition'][state.name]['action'] = entry.action.name
+            transitions_for_event['AutoTransition'][state.name]['to'] = None
+        else:
+            if 'conditions' not in transitions_for_event['AutoTransition'][state.name]:
+                transitions_for_event['AutoTransition'][state.name]['conditions'] = entry.guard.guard_conditions()
+            else:
+                transitions_for_event['AutoTransition'][state.name]['conditions'].union(entry.guard.guard_conditions())
+
+            if 'guards' not in transitions_for_event['AutoTransition'][state.name]:
+                transitions_for_event['AutoTransition'][state.name]['guards'] = set()
+                transitions_for_event['AutoTransition'][state.name]['transition'] = dict()
+
+            transitions_for_event['AutoTransition'][state.name]['guards'].add(entry.guard.to_string())
+
+            if entry.guard.to_string() not in transitions_for_event['AutoTransition'][state.name]['transition']:
+                transitions_for_event['AutoTransition'][state.name]['transition'][entry.guard.to_string()] = dict()
+
+            transitions_for_event['AutoTransition'][state.name]['transition'][entry.guard.to_string()]['action'] = entry.action.name
+            transitions_for_event['AutoTransition'][state.name]['transition'][entry.guard.to_string()]['to'] = None
+
+    exit_actions = dict()
+    for state in states:
+      if state.exit is not None:
+        exit_actions[state.name] = dict()
+        if state.exit.guard is not None:
+          exit_actions[state.name]['conditions'] = state.exit.guard.guard_conditions()
+          exit_actions[state.name]['guard'] = state.exit.guard.to_string()
+
+        exit_actions[state.name]['action'] = state.exit.action.name
+
+
     if global_entry.initial_transition.action is not None:
       initial_action = global_entry.initial_transition.action.name
     else:
@@ -108,6 +152,22 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
     desc['initial_state'] = global_entry.initial_transition.toState
     desc['initial_action'] = initial_action
     desc['transitions'] = transitions_for_event
+    desc['exit_actions'] = exit_actions
+
+
+    #for e in desc['event_names']:
+    #  for from_state, tr in desc['transitions'][e].items():
+    #    if 'to' in tr and tr['to'] is not None:
+    #      if from_state in desc['exit_actions']:
+    #        if 'conditions' in desc['exit_actions'][from_state]:
+    #          for c in desc['exit_actions'][from_state]['conditions']:
+    #            print(f"const bool {c} = instance->guards[{desc['prefix']}Guard_{c}](instance->context);")
+    #            print(f"if ({desc['exit_actions'][from_state]['guard']})")
+    #            print('{')
+    #            print(f"instance->actions[{desc['prefix']}Action_{desc['exit_actions'][from_state]['action']}](instance->context);")
+    #            print('}')
+    #        else:
+    #          print(f"instance->actions[{desc['prefix']}Action_{desc['exit_actions'][from_state]['action']}](instance->context);")
 
     t = Template(filename=template)
     with open(dest, 'w') as f:
@@ -116,8 +176,11 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
 def generate_header(states, guard_names, action_names, event_names):
     template = path.join(path.dirname(path.realpath(__file__)), 'header.mako')
     prefix = statemachine_name[:1].upper() + statemachine_name[1:]
-    file_name = statemachine_name
-    dest = path.join(destination_folder, file_name + '.h')
+    include_guard = statemachine_name.upper() + '_H'
+    for c in list("`~!@#$%^&()-+=[]{};'.,"):
+      prefix = prefix.replace(c, '_')
+      include_guard = include_guard.replace(c, '_')
+    dest = path.join(destination_folder, statemachine_name + '.h')
     
     desc = dict()
     desc['guard_names'] = guard_names
@@ -125,7 +188,7 @@ def generate_header(states, guard_names, action_names, event_names):
     desc['event_names'] = event_names
     desc['state_names'] = [s.name for s in states]
     desc['prefix'] = prefix
-    desc['file_name'] = file_name
+    desc['include_guard'] = include_guard
 
     t = Template(filename=template)
     with open(dest, 'w') as f:

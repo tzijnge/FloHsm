@@ -32,10 +32,16 @@
     <ClCompile Include="C\TestExhaustive\exhaustive.c">
       <Filter>C\TestExhaustive</Filter>
     </ClCompile>
-    <ClCompile Include="C\TestChoice\TestChoiceC.cpp">
-      <Filter>C\TestChoice</Filter>
+    <ClCompile Include="C\TestEntryExit\TestEntryExitC.cpp">
+      <Filter>C\TestEntryExit</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestEntryExit\entry-exit.c">
+      <Filter>C\TestEntryExit</Filter>
     </ClCompile>
     <ClCompile Include="C\TestChoice\choice.c">
+      <Filter>C\TestChoice</Filter>
+    </ClCompile>
+    <ClCompile Include="C\TestChoice\TestChoiceC.cpp">
       <Filter>C\TestChoice</Filter>
     </ClCompile>
   </ItemGroup>
@@ -67,8 +73,11 @@
     <Filter Include="C\TestUart">
       <UniqueIdentifier>{d421e57d-aefc-4d29-91d8-58a932314aec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="C\TestEntryExit">
+      <UniqueIdentifier>{16f3f574-fe30-46ec-a95d-18d8dd8f78ec}</UniqueIdentifier>
+    </Filter>
     <Filter Include="C\TestChoice">
-      <UniqueIdentifier>{7cbb0d90-fd1d-49de-8254-c0a4450d7e82}</UniqueIdentifier>
+      <UniqueIdentifier>{4714f3e2-e477-42aa-aa93-81427eb74ec3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -138,6 +147,9 @@
     <ClInclude Include="C\TestExhaustive\exhaustive.h">
       <Filter>C\TestExhaustive</Filter>
     </ClInclude>
+    <ClInclude Include="C\TestEntryExit\entry-exit.h">
+      <Filter>C\TestEntryExit</Filter>
+    </ClInclude>
     <ClInclude Include="C\TestChoice\choice.h">
       <Filter>C\TestChoice</Filter>
     </ClInclude>
@@ -163,6 +175,9 @@
     </CustomBuild>
     <CustomBuild Include="C\TestExhaustive\exhaustive.puml">
       <Filter>C\TestExhaustive</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C\TestEntryExit\entry-exit.puml">
+      <Filter>C\TestEntryExit</Filter>
     </CustomBuild>
     <CustomBuild Include="C\TestChoice\choice.puml">
       <Filter>C\TestChoice</Filter>
