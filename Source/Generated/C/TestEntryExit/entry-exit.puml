@@ -1,0 +1,13 @@
+@startuml
+
+state S1: <<entry>> [g1] / a1
+state S1: <<exit>> / a2
+
+state S2: <<entry>> / a6
+state S2: <<exit>> [g2] / a7
+
+[*] --> S1
+S1 --> S1: e1 / a3
+S1 --> S2: e2 / a4
+S2 --> S1: e1 / a5
+@enduml

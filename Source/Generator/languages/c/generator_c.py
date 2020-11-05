@@ -7,7 +7,7 @@ statemachine_name = ''
 def generate_source(states, guard_names, action_names, event_names, global_entry):
     template = path.join(path.dirname(path.realpath(__file__)), 'source.mako')
     prefix = statemachine_name[:1].upper() + statemachine_name[1:]
-    for c in list("`~!@#$%^&()-+=[]{};'.,"):
+    for c in list(" `~!@#$%^&()-+=[]{};'.,"):
       prefix = prefix.replace(c, '_')
     file_name = statemachine_name
     dest = path.join(destination_folder, file_name + '.c')
@@ -154,21 +154,6 @@ def generate_source(states, guard_names, action_names, event_names, global_entry
     desc['transitions'] = transitions_for_event
     desc['exit_actions'] = exit_actions
 
-
-    #for e in desc['event_names']:
-    #  for from_state, tr in desc['transitions'][e].items():
-    #    if 'to' in tr and tr['to'] is not None:
-    #      if from_state in desc['exit_actions']:
-    #        if 'conditions' in desc['exit_actions'][from_state]:
-    #          for c in desc['exit_actions'][from_state]['conditions']:
-    #            print(f"const bool {c} = instance->guards[{desc['prefix']}Guard_{c}](instance->context);")
-    #            print(f"if ({desc['exit_actions'][from_state]['guard']})")
-    #            print('{')
-    #            print(f"instance->actions[{desc['prefix']}Action_{desc['exit_actions'][from_state]['action']}](instance->context);")
-    #            print('}')
-    #        else:
-    #          print(f"instance->actions[{desc['prefix']}Action_{desc['exit_actions'][from_state]['action']}](instance->context);")
-
     t = Template(filename=template)
     with open(dest, 'w') as f:
         f.write(t.render(desc=desc))
@@ -177,7 +162,7 @@ def generate_header(states, guard_names, action_names, event_names):
     template = path.join(path.dirname(path.realpath(__file__)), 'header.mako')
     prefix = statemachine_name[:1].upper() + statemachine_name[1:]
     include_guard = statemachine_name.upper() + '_H'
-    for c in list("`~!@#$%^&()-+=[]{};'.,"):
+    for c in list(" `~!@#$%^&()-+=[]{};'.,"):
       prefix = prefix.replace(c, '_')
       include_guard = include_guard.replace(c, '_')
     dest = path.join(destination_folder, statemachine_name + '.h')
