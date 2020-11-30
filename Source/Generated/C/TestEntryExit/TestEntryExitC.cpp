@@ -43,8 +43,8 @@ namespace C
     static void A5(void* context) { static_cast<TestEntryExit*>(context)->AddToLog("A5"); }
     static void A6(void* context) { static_cast<TestEntryExit*>(context)->AddToLog("A6"); }
     static void A7(void* context) { static_cast<TestEntryExit*>(context)->AddToLog("A7"); }
-    static bool G1(void* context) { return static_cast<TestEntryExit*>(context)->g1; }
-    static bool G2(void* context) { return static_cast<TestEntryExit*>(context)->g2; }
+    static bool G1(const void* context) { return static_cast<const TestEntryExit*>(context)->g1; }
+    static bool G2(const void* context) { return static_cast<const TestEntryExit*>(context)->g2; }
 
     void AddToLog(const std::string& l)
     {

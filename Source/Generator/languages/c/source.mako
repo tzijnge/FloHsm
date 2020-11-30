@@ -7,7 +7,7 @@
 static void NullAction(void* a) { (void)a; }
 % endif
 % if len(desc['guard_names']) != 0:
-static bool NullGuard(void* g) { (void)g; return false; }
+static bool NullGuard(const void* g) { (void)g; return false; }
 % endif
 
 % if 'AutoTransition' in desc['transitions']:

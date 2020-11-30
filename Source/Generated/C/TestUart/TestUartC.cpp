@@ -39,7 +39,7 @@ namespace C
     static void setError(void* context) { static_cast<TestUart*>(context)->AddToLog("setError"); }
     static void stopHw(void* context) { static_cast<TestUart*>(context)->AddToLog("stopHw"); }
     static void startHw(void* context) { static_cast<TestUart*>(context)->AddToLog("startHw"); }
-    static bool ConfigOk(void* context) { return static_cast<TestUart*>(context)->configOk; }
+    static bool ConfigOk(const void* context) { return static_cast<const TestUart*>(context)->configOk; }
 
     void AddToLog(const std::string& l)
     {

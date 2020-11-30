@@ -12,7 +12,7 @@ extern "C" {
 #endif
 
 typedef void (*${desc['prefix']}Action)(void*);
-typedef bool (*${desc['prefix']}Guard)(void*);
+typedef bool (*${desc['prefix']}Guard)(const void*);
 
 % if len(desc['action_names']) != 0:
 typedef enum
