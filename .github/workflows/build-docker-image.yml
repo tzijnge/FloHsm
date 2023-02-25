@@ -19,7 +19,7 @@ jobs:
     - name: Publish if on main branch
       run: |
         echo Branch: "${{github.ref}}";
-        if [ "${{github.ref}}" = "refs/heads/debug-build" ]; then
+        if [ "${{github.ref}}" = "refs/heads/main" ]; then
           echo main branch, so publish
           docker tag flohsm:latest tekkiesuk/flohsm:latest; 
           docker tag flohsm:latest tekkiesuk/flohsm:${{github.sha}}; 
