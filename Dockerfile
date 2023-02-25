@@ -1,17 +1,15 @@
-FROM python:latest
+#docker build --tag flohsm --progress=plain .
+#docker run -v $(pwd):/run flohsm statemachine.txt
+FROM python:3.12-rc-bullseye
 
-WORKDIR /install
-RUN wget https://www.dabeaz.com/ply/ply-3.11.tar.gz --no-check-certificate
-RUN tar -xvf ply-3.11.tar.gz
-WORKDIR /install/ply-3.11
-RUN python setup.py install
-RUN pip install mako
+RUN pip install ply==3.11
+RUN pip install Mako==1.2.4
 
 WORKDIR /code
 COPY Source/Generator/ ./
 COPY Docker/entrypoint.sh entrypoint.sh
-RUN ls .
+RUN chmod u+x entrypoint.sh
 
 WORKDIR /run
 ENTRYPOINT ["/code/entrypoint.sh"]
-CMD ["10","200"]
+CMD ["-h"]
