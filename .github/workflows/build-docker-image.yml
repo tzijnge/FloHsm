@@ -2,9 +2,9 @@ name: Build and Release if on main branch
 
 on:
   push:
-    branches: [ "master", "develop", "debug-build" ]
+    branches: [ "main", "develop", "debug-build" ]
   pull_request:
-    branches: [ "master", "develop", "debug-build" ]
+    branches: [ "main", "develop", "debug-build" ]
 
 jobs:
 
