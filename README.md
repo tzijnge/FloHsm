@@ -29,6 +29,13 @@ S1 --> S2 : E1 [G1] / A1
 ```
 python FloHsm.py statemachine.txt
 ```
+#### Via Docker
+```
+docker build --tag flohsm .
+docker run -v $(pwd):/run flohsm statemachine.txt
+```
+
+
 See Source/Generated/TestCompositeState for an example. Open the .puml file in plantuml and have a look at the test for using the generated code in C++
 
 For now, FloHsm does not parse the @startuml and @enduml keywords that are required by PlantUml. The solution is to write the state machine description in a text file sm.txt. This file is used for FloHsm. A second file sm.puml only contains the following lines and is used to render the diagram in PlantUml

@@ -1,6 +1,7 @@
 v15
 Debug
 *.user
+.vs/
 /Source/Generated/TestChoice/Interfaces.hpp
 /Source/Generated/TestChoice/StateIds.hpp
 /Source/Generated/TestChoice/StateMachine.hpp
