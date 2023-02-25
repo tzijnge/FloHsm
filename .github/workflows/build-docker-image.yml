@@ -22,10 +22,8 @@ jobs:
         if [ "${{github.ref}}" = "refs/heads/main" ]; then
           echo main branch, so publish
           docker tag flohsm:latest tekkiesuk/flohsm:latest; 
-          docker tag flohsm:latest tekkiesuk/flohsm:$(date +%s); 
           docker login -u tekkiesuk -p ${{ secrets.DOCKER_HUB_CRUD }};
           docker push tekkiesuk/flohsm:latest;
-          docker push tekkiesuk/flohsm:$(date +%s); 
         else
           echo Skip publish;
         fi;
