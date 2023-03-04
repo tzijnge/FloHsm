@@ -2,9 +2,9 @@ name: Build and Release if on main branch
 
 on:
   push:
-    branches: [ "main", "develop", "debug-build" ]
+    branches: [ "main", "develop", "debug-build", "flohsm-build-docker-image" ]
   pull_request:
-    branches: [ "main", "develop", "debug-build" ]
+    branches: [ "main", "develop" ]
 
 jobs:
 
